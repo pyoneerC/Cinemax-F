@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register Form</title>
+  <title>Login Form</title>
   <script>
     function updateFormAction(event) {
       event.preventDefault();
 
-      const form = document.getElementById('register-form');
-      const username = form.elements['username'].value;
+      const form = document.getElementById('login-form');
+      const email = form.elements['email'].value;
       const password = form.elements['password'].value;
       const baseUrl = 'http://127.0.0.1:8000/login/';
-      const queryParams = `?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+      const queryParams = `?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
       const actionUrl = baseUrl + queryParams;
 
       form.action = actionUrl;
@@ -21,17 +21,17 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('register-form');
+      const form = document.getElementById('login-form');
       form.addEventListener('submit', updateFormAction);
     });
   </script>
 </head>
 <body>
-<form id="register-form" method="post">
+<form id="login-form" method="post">
   <label>
-    Username
+    Email
   </label>
-  <input type="text" name="username" required>
+  <input type="email" name="email" required>
   <label>
     Password
   </label>

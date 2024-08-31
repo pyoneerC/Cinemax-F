@@ -11,7 +11,7 @@
       const form = document.getElementById('register-form');
       const username = form.elements['username'].value;
       const password = form.elements['password'].value;
-      const baseUrl = 'http://127.0.0.1:8000/register/';
+      const baseUrl = 'http://127.0.0.1:8000/login/';
       const queryParams = `?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
       const actionUrl = baseUrl + queryParams;
 
@@ -37,8 +37,7 @@
   </label>
   <input type="password" name="password" required>
 
-  <button type="submit">Register</button>
-  <!--todo: login, /profile-->
+  <button type="submit">Login</button>
 </form>
 </body>
 </html>

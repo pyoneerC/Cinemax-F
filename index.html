@@ -3,30 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Form</title>
+  <title>Login & Register Forms</title>
   <script>
-    function updateFormAction(event) {
+    function updateFormAction(event, formId, baseUrl) {
       event.preventDefault();
 
-      const form = document.getElementById('login-form');
+      const form = document.getElementById(formId);
       const email = form.elements['email'].value;
       const password = form.elements['password'].value;
-      const baseUrl = 'http://127.0.0.1:8000/login/';
       const queryParams = `?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
       const actionUrl = baseUrl + queryParams;
 
       form.action = actionUrl;
-
       form.submit();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('login-form');
-      form.addEventListener('submit', updateFormAction);
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+
+      loginForm.addEventListener('submit', (event) => updateFormAction(event, 'login-form', 'http://127.0.0.1:8000/login/'));
+      registerForm.addEventListener('submit', (event) => updateFormAction(event, 'register-form', 'http://127.0.0.1:8000/register/'));
     });
   </script>
 </head>
 <body>
+<h1>Cinemax</h1>
+
+<h2>Login</h2>
 <form id="login-form" method="post">
   <label>
     Email
@@ -39,5 +43,25 @@
 
   <button type="submit">Login</button>
 </form>
+
+<h2 id="register">Register</h2>
+
+<p>
+  Don't have an account?
+</p>
+
+<form id="register-form" method="post">
+  <label>
+    Email
+  </label>
+  <input type="email" name="email" required>
+  <label>
+    Password
+  </label>
+  <input type="password" name="password" required>
+
+  <button type="submit">Register</button>
+</form>
+
 </body>
 </html>

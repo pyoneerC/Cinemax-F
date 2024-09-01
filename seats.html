@@ -232,24 +232,28 @@
 
   function proceedToNextStep() {
     if (selectedSeats.length === maxSeats) {
-      // Mark all selected seats as unavailable
-      selectedSeats.forEach(seatNumber => {
-        const seat = document.querySelector(`.seat[data-seat="${seatNumber}"]`);
-        if (seat) {
-          seat.classList.remove('selected');
-          seat.classList.add('unavailable');
-        }
-      });
+      const confirmation = confirm(`You have selected the following seats: ${selectedSeats.join(', ')}. Do you want to proceed to payment?`);
+      if (confirmation) {
+        // Mark all selected seats as unavailable
+        selectedSeats.forEach(seatNumber => {
+          const seat = document.querySelector(`.seat[data-seat="${seatNumber}"]`);
+          if (seat) {
+            seat.classList.remove('selected');
+            seat.classList.add('unavailable');
+          }
+        });
 
-      localStorage.setItem('reservedSeats', JSON.stringify(selectedSeats));
+        localStorage.setItem('reservedSeats', JSON.stringify(selectedSeats));
 
-      alert(`Proceeding with selected seats: ${selectedSeats.join(', ')}`);
-      window.location.href = 'payment.html';
+        // Redirect to payment page
+        window.location.href = 'payment.html';
+      }
     } else {
       alert('Please select all the required seats!');
     }
   }
 </script>
+
 
 
 </body>

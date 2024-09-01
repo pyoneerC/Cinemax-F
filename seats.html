@@ -226,7 +226,7 @@
     selectedSeatsDisplay.textContent = `Selected Seats: ${selectedSeats.join(', ') || 'None'}`;
     const seatsRemaining = maxSeats - selectedSeats.length;
     seatsCountDisplay.textContent = seatsRemaining;
-    continueButton.disabled = selectedSeats.length === maxSeats ? false : true;
+    continueButton.disabled = selectedSeats.length !== maxSeats;
   }
 
   function proceedToNextStep() {

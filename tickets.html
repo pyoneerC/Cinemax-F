@@ -4,6 +4,37 @@
   <meta charset="UTF-8">
   <title>Ticket Purchase</title>
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      display: flex;
+      padding: 20px;
+    }
+    .profile {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #f4f4f4;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      width: 200px;
+    }
+    .profile img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .profile h3 {
+      margin: 10px 0 5px;
+    }
+    .profile p {
+      margin: 5px 0;
+    }
     button {
       margin-top: 10px;
     }
@@ -11,47 +42,74 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
+    .ticket-list {
+      margin-left: 240px;
+      padding: 20px;
+    }
+    .countdown {
+      font-size: 18px;
+      color: red;
+      font-weight: bold;
+      margin: 20px;
+    }
   </style>
 </head>
 <body>
 
-<h1>Tickets</h1>
+<div class="profile">
+  <img src="https://via.placeholder.com/80" alt="Profile Picture">
+  <h3>John Doe</h3>
+  <p>Email: john.doe@example.com</p>
+  <p>Reserved Movies:</p>
+  <ul>
+    <li>The Matrix</li>
+    <li>Inception</li>
+  </ul>
+</div>
 
-<ul>
-  <li>
-    <strong>Normal Ticket</strong>
-    <p>Price: $69</p>
-    <label for="normal-quantity">Quantity:</label>
-    <input type="number" id="normal-quantity" name="normal-quantity" min="0" value="0" max="3">
-    <button id="normal-button" onclick="addToCart('Normal Ticket', 69, document.getElementById('normal-quantity').value, 'normal-button')">Add to Cart</button>
-  </li>
-  <hr>
-  <li>
-    <strong>Shiny Ticket</strong>
-    <p>Price: $420</p>
-    <label for="shiny-quantity">Quantity:</label>
-    <input type="number" id="shiny-quantity" name="shiny-quantity" min="0" value="0" max="2">
-    <button id="shiny-button" onclick="addToCart('Shiny Ticket', 420, document.getElementById('shiny-quantity').value, 'shiny-button')">Add to Cart</button>
-  </li>
-  <hr>
-  <li>
-    <strong>Legendary Ticket</strong>
-    <p>Price: $42,069</p>
-    <label for="legendary-quantity">Quantity:</label>
-    <input type="number" id="legendary-quantity" name="legendary-quantity" min="0" value="0" max="1">
-    <button id="legendary-button" onclick="addToCart('Legendary Ticket', 42069, document.getElementById('legendary-quantity').value, 'legendary-button')">Add to Cart</button>
-  </li>
-</ul>
+<div class="container">
+  <div class="ticket-list">
+    <h1>Tickets</h1>
 
-<h2>Cart</h2>
-<ul id="cart"></ul>
-<p id="total"></p>
+    <ul>
+      <li>
+        <strong>Normal Ticket</strong>
+        <p>Price: $69</p>
+        <label for="normal-quantity">Quantity:</label>
+        <input type="number" id="normal-quantity" name="normal-quantity" min="0" value="0" max="3">
+        <button id="normal-button" onclick="addToCart('Normal Ticket', 69, document.getElementById('normal-quantity').value, 'normal-button')">Add to Cart</button>
+      </li>
+      <hr>
+      <li>
+        <strong>Shiny Ticket</strong>
+        <p>Price: $420</p>
+        <label for="shiny-quantity">Quantity:</label>
+        <input type="number" id="shiny-quantity" name="shiny-quantity" min="0" value="0" max="2">
+        <button id="shiny-button" onclick="addToCart('Shiny Ticket', 420, document.getElementById('shiny-quantity').value, 'shiny-button')">Add to Cart</button>
+      </li>
+      <hr>
+      <li>
+        <strong>Legendary Ticket</strong>
+        <p>Price: $42,069</p>
+        <label for="legendary-quantity">Quantity:</label>
+        <input type="number" id="legendary-quantity" name="legendary-quantity" min="0" value="0" max="1">
+        <button id="legendary-button" onclick="addToCart('Legendary Ticket', 42069, document.getElementById('legendary-quantity').value, 'legendary-button')">Add to Cart</button>
+      </li>
+    </ul>
 
-<button id="continue-button" onclick="continueToCheckout()">Continue</button>
+    <h2>Cart</h2>
+    <ul id="cart"></ul>
+    <p id="total"></p>
+
+    <button id="continue-button" onclick="continueToCheckout()">Continue</button>
+    <p id="countdown" class="countdown"></p>
+  </div>
+</div>
 
 <script>
   let cart = [];
   let total = 0;
+  const TIMER_DURATION = 5 * 60 * 1000;
 
   function addToCart(ticketType, price, quantity, buttonId) {
     quantity = parseInt(quantity);
@@ -80,7 +138,9 @@
 
   function continueToCheckout() {
     if (cart.length > 0) {
-      alert('Proceeding to checkout!');
+      localStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem('total', total);
+      window.location.href = 'payment.html';
     } else {
       alert('Your cart is empty!');
     }
@@ -91,6 +151,49 @@
     button.disabled = true;
     button.classList.add('disabled');
   }
+
+  function resetTimer() {
+    const now = new Date().getTime();
+    localStorage.setItem('timerStart', now);
+  }
+
+  function checkTimer() {
+    const timerStart = parseInt(localStorage.getItem('timerStart'), 10);
+    if (isNaN(timerStart)) {
+      resetTimer();
+      return;
+    }
+
+    const now = new Date().getTime();
+    const elapsedTime = now - timerStart;
+
+    if (elapsedTime > TIMER_DURATION) {
+      alert('Timer expired!');
+      window.location.href = 'index.html';
+    } else {
+      updateCountdown(TIMER_DURATION - elapsedTime);
+    }
+  }
+
+  function updateCountdown(remainingTime) {
+    const countdownElement = document.getElementById('countdown');
+    const minutes = Math.floor(remainingTime / 60000);
+    const seconds = Math.floor((remainingTime % 60000) / 1000);
+    countdownElement.textContent = `Time Remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    resetTimer();
+
+    checkTimer();
+
+    setInterval(() => {
+      const remainingTime = TIMER_DURATION - (new Date().getTime() - parseInt(localStorage.getItem('timerStart'), 10));
+      if (remainingTime > 0) {
+        updateCountdown(remainingTime);
+      }
+    }, 1000);
+  });
 </script>
 
 </body>

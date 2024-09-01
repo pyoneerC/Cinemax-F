@@ -230,14 +230,26 @@
   }
 
   function proceedToNextStep() {
-    if (selectedSeats.length > 0) {
+    if (selectedSeats.length === maxSeats) {
+      // Mark all selected seats as unavailable
+      selectedSeats.forEach(seatNumber => {
+        const seat = document.querySelector(`.seat[data-seat="${seatNumber}"]`);
+        if (seat) {
+          seat.classList.remove('selected');
+          seat.classList.add('unavailable');
+        }
+      });
+
+      localStorage.setItem('reservedSeats', JSON.stringify(selectedSeats));
+
       alert(`Proceeding with selected seats: ${selectedSeats.join(', ')}`);
       window.location.href = 'payment.html';
     } else {
-      alert('No seats selected!');
+      alert('Please select all the required seats!');
     }
   }
 </script>
+
 
 </body>
 </html>

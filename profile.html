@@ -25,8 +25,10 @@
       }
     }
 
-    document.getElementById('back-button').addEventListener('click', () => {
-      window.history.back();
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('back-button').addEventListener('click', () => {
+        window.history.back();
+      });
     });
   </script>
 </head>
@@ -41,10 +43,10 @@
   <br>
   <br>
   <button type="submit">Get Profile</button>
-  <button id="back-button">
-    Go back
-  </button>
 </form>
 <div id="user-info"></div>
+<button id="back-button">
+  Go back
+</button>
 </body>
 </html>

@@ -193,12 +193,13 @@
 
 <div class="controls">
   <p id="selected-seats">Selected Seats: None</p>
-  <p id="seats-remaining">Seats Remaining: <span id="seats-count">3</span></p>
+  <p id="seats-remaining">Seats Remaining: <span id="seats-count"></span></p>
   <button id="continue-button" onclick="proceedToNextStep()" disabled>Continue</button>
 </div>
 
 <script>
-  const maxSeats = 3;  // Maximum number of seats allowed to select
+  const maxSeats = parseInt(localStorage.getItem('totalSeats'), 10);
+  document.getElementById('seats-count').textContent = maxSeats;
   let selectedSeats = [];
 
   document.querySelectorAll('.seat').forEach(seat => {
@@ -225,7 +226,7 @@
     selectedSeatsDisplay.textContent = `Selected Seats: ${selectedSeats.join(', ') || 'None'}`;
     const seatsRemaining = maxSeats - selectedSeats.length;
     seatsCountDisplay.textContent = seatsRemaining;
-    continueButton.disabled = selectedSeats.length === 0;
+    continueButton.disabled = selectedSeats.length === maxSeats ? false : true;
   }
 
   function proceedToNextStep() {

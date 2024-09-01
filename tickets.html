@@ -138,8 +138,10 @@
 
   function continueToCheckout() {
     if (cart.length > 0) {
+      const totalSeats = cart.reduce((sum, item) => sum + item.quantity, 0);
       localStorage.setItem('cart', JSON.stringify(cart));
       localStorage.setItem('total', total);
+      localStorage.setItem('totalSeats', totalSeats);
       window.location.href = 'seats.html';
     } else {
       alert('Your cart is empty!');

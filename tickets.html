@@ -140,7 +140,6 @@
     if (cart.length > 0) {
       localStorage.setItem('cart', JSON.stringify(cart));
       localStorage.setItem('total', total);
-      window.location.href = 'payment.html';
       window.location.href = 'seats.html';
     } else {
       alert('Your cart is empty!');

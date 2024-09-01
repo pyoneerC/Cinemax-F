@@ -6,8 +6,38 @@
   <title>Payment</title>
   <script src="https://js.stripe.com/v3/"></script>
   <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <style>
+    .summary {
+      margin: 20px;
+      font-size: 18px;
+    }
+    .summary ul {
+      list-style: none;
+      padding: 0;
+    }
+    .summary li {
+      margin-bottom: 10px;
+    }
+  </style>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const total = localStorage.getItem('total') || 0;
+
+      const summaryElement = document.getElementById('cart-summary');
+      if (cart.length > 0) {
+        const list = document.createElement('ul');
+        cart.forEach(item => {
+          const listItem = document.createElement('li');
+          listItem.textContent = `${item.quantity} x ${item.ticketType} @ $${item.price} each`;
+          list.appendChild(listItem);
+        });
+        summaryElement.appendChild(list);
+        summaryElement.innerHTML += `<p>Total: $${total}</p>`;
+      } else {
+        summaryElement.textContent = 'No items in cart.';
+      }
+
       const stripeForm = document.getElementById('stripe-form');
       const mercadoPagoForm = document.getElementById('mercado-pago-form');
       const stripeButton = document.getElementById('stripe-button');
@@ -23,7 +53,6 @@
         stripeForm.style.display = 'none';
       });
 
-      // Initialize Stripe
       const stripe = Stripe('your-stripe-publishable-key');
       const stripeFormElement = document.getElementById('stripe-payment-form');
       const elements = stripe.elements();
@@ -37,13 +66,11 @@
           console.error(error);
           alert('Error processing payment.');
         } else {
-          // Process Stripe payment with the token
           stripeFormElement.action = `http://127.0.0.1:8000/stripe_payment?token=${token.id}`;
           stripeFormElement.submit();
         }
       });
 
-      // Initialize Mercado Pago
       const mp = new MercadoPago('your-mercado-pago-public-key', {
         locale: 'en-US'
       });
@@ -54,13 +81,11 @@
         event.preventDefault();
         const formData = new FormData(mercadoPagoFormElement);
 
-        // You might need to initialize Mercado Pago's checkout here
         mp.checkout({
           preference: {
             id: 'YOUR_PREFERENCE_ID'
           }
         }).then((response) => {
-          // Process Mercado Pago payment
           const queryParams = new URLSearchParams(formData).toString();
           mercadoPagoFormElement.action = `http://127.0.0.1:8000/mercado_pago_payment?${queryParams}`;
           mercadoPagoFormElement.submit();
@@ -75,6 +100,8 @@
 <body>
 <h1>Payment</h1>
 
+<div class="summary" id="cart-summary"></div>
+
 <div>
   <button id="stripe-button" type="button">Pay with Card</button>
   <button id="mercado-pago-button" type="button">Pay with Mercado Pago</button>
@@ -84,7 +111,6 @@
   <h2>Pay with Card</h2>
   <form id="stripe-payment-form" method="post">
     <div id="card-element">
-      <!-- A Stripe Element will be inserted here. -->
     </div>
     <button type="submit">Submit Payment</button>
   </form>

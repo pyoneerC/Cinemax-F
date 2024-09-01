@@ -7,6 +7,10 @@
     button {
       margin-top: 10px;
     }
+    .disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -18,24 +22,24 @@
     <strong>Normal Ticket</strong>
     <p>Price: $69</p>
     <label for="normal-quantity">Quantity:</label>
-    <input type="number" id="normal-quantity" name="normal-quantity" min="0" value="0">
-    <button onclick="addToCart('Normal Ticket', 69, document.getElementById('normal-quantity').value)">Add to Cart</button>
+    <input type="number" id="normal-quantity" name="normal-quantity" min="0" value="0" max="3">
+    <button id="normal-button" onclick="addToCart('Normal Ticket', 69, document.getElementById('normal-quantity').value, 'normal-button')">Add to Cart</button>
   </li>
   <hr>
   <li>
     <strong>Shiny Ticket</strong>
     <p>Price: $420</p>
     <label for="shiny-quantity">Quantity:</label>
-    <input type="number" id="shiny-quantity" name="shiny-quantity" min="0" value="0">
-    <button onclick="addToCart('Shiny Ticket', 420, document.getElementById('shiny-quantity').value)">Add to Cart</button>
+    <input type="number" id="shiny-quantity" name="shiny-quantity" min="0" value="0" max="2">
+    <button id="shiny-button" onclick="addToCart('Shiny Ticket', 420, document.getElementById('shiny-quantity').value, 'shiny-button')">Add to Cart</button>
   </li>
   <hr>
   <li>
     <strong>Legendary Ticket</strong>
     <p>Price: $42,069</p>
     <label for="legendary-quantity">Quantity:</label>
-    <input type="number" id="legendary-quantity" name="legendary-quantity" min="0" value="0">
-    <button onclick="addToCart('Legendary Ticket', 42069, document.getElementById('legendary-quantity').value)">Add to Cart</button>
+    <input type="number" id="legendary-quantity" name="legendary-quantity" min="0" value="0" max="1">
+    <button id="legendary-button" onclick="addToCart('Legendary Ticket', 42069, document.getElementById('legendary-quantity').value, 'legendary-button')">Add to Cart</button>
   </li>
 </ul>
 
@@ -49,11 +53,12 @@
   let cart = [];
   let total = 0;
 
-  function addToCart(ticketType, price, quantity) {
+  function addToCart(ticketType, price, quantity, buttonId) {
     quantity = parseInt(quantity);
     if (quantity > 0) {
       cart.push({ ticketType, price, quantity });
       updateCart();
+      disableButton(buttonId);
     }
   }
 
@@ -79,6 +84,12 @@
     } else {
       alert('Your cart is empty!');
     }
+  }
+
+  function disableButton(buttonId) {
+    const button = document.getElementById(buttonId);
+    button.disabled = true;
+    button.classList.add('disabled');
   }
 </script>
 

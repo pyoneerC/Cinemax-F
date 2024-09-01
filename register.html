@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+</head>
+<body>
+
+<h1>Cinemax</h1>
+
 <h2 id="register">Register</h2>
 <form id="register-form" method="post">
   <label>Email</label>
@@ -6,5 +17,53 @@
   <input type="password" name="password" required>
   <button type="submit">Register</button>
 </form>
+
+<script>
+  function updateFormAction(event, formId, baseUrl) {
+    event.preventDefault();
+
+    const form = document.getElementById(formId);
+    const email = form.elements['email'].value;
+    const password = form.elements['password'].value || '';
+
+    const movieTitle = getQueryParam('movie');
+    const movieTime = getQueryParam('time');
+
+    let queryParams = `?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+    if (movieTitle) {
+      queryParams += `&movie=${encodeURIComponent(movieTitle)}`;
+    }
+    if (movieTime) {
+      queryParams += `&time=${encodeURIComponent(movieTime)}`;
+    }
+
+    const actionUrl = baseUrl + queryParams;
+    form.action = actionUrl;
+    form.submit();
+  }
+
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const registerForm = document.getElementById('register-form');
+
+    const movieTitle = getQueryParam('movie');
+    const movieTime = getQueryParam('time');
+    if (movieTitle) {
+      document.getElementById('selected-movie').textContent = `Selected Movie: ${movieTitle}`;
+    }
+    if (movieTime) {
+      document.getElementById('selected-time').textContent = `Selected Time: ${movieTime}`;
+    }
+
+    if (registerForm) {
+      registerForm.addEventListener('submit', (event) => updateFormAction(event, 'register-form', 'http://127.0.0.1:8000/register/'));
+    }
+  });
+</script>
+
 </body>
 </html>

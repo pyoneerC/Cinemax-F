@@ -6,15 +6,21 @@
   <title>Payment Confirmation</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       text-align: center;
       padding: 20px;
+      background-color: #f4f4f4;
+      margin: 0;
     }
     .confirmation {
       border: 1px solid #ddd;
       padding: 20px;
-      border-radius: 8px;
+      border-radius: 12px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       display: inline-block;
+      max-width: 600px;
+      width: 100%;
     }
     .qr-code {
       margin: 20px 0;
@@ -22,19 +28,26 @@
     .qr-code img {
       width: 150px;
       height: 150px;
+      border-radius: 8px;
     }
     .details {
       margin: 20px 0;
+      text-align: center;
+    }
+    .details p {
+      margin: 8px 0;
     }
     button {
       background-color: #007bff;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 12px 24px;
       border-radius: 5px;
       cursor: pointer;
       font-size: 16px;
-      margin: 5px;
+      margin: 10px;
+      text-align: center;
+      text-decoration: none;
     }
     button a {
       color: white;
@@ -42,6 +55,22 @@
     }
     .contact-button {
       background-color: #28a745;
+    }
+    .details strong {
+      color: #333;
+    }
+    .details span {
+      color: #555;
+    }
+    @media (max-width: 600px) {
+      .confirmation {
+        padding: 10px;
+      }
+      button {
+        padding: 10px;
+        font-size: 14px;
+        margin: 5px;
+      }
     }
   </style>
 </head>
@@ -57,15 +86,19 @@
 
   <div class="details">
     <p><strong>Order Number:</strong> <span id="order-number"></span></p>
-    <p><strong>Amount:</strong> $69</p>
-    <p><strong>Date:</strong> <span id="current-date"></span></p>
     <p><strong>Transaction ID:</strong> <span id="transaction-id"></span></p>
+    <p><strong>Transaction Date:</strong> <span id="current-date"></span></p>
+    <br>
+    <p><strong>Movie:</strong> The Matrix</p>
+    <p><strong>Time:</strong> 7:00 PM</p>
+    <p><strong>Seats:</strong> ['A1', 'A2', 'A3']</p>
+    <p><strong>Amount:</strong> $69</p>
   </div>
 
   <p>If you have any questions or need assistance, please contact our support team.</p>
 
   <button class="contact-button">
-    <a href="mailto:maxcomperatore@gmail.com?subject=Support Request&body=Hello%20Maximo%2C%0A%0AI%20need%20assistance%20regarding%20the%20recent%20payment%20with%20Order%20Number%3A%20%5BOrder%20Number%5D%20and%20Transaction%20ID%3A%20%5BTransaction%20ID%5D.%0A%0AThank%20you%21">Contact Support</a>
+    <a href="mailto:maxcomperatore@gmail.com?subject=Support Request&body=Hello%20Maximo%2C%0A%0AI%20need%20assistance%20regarding%20the%20recent%20payment%20with%20Order%20Number%3A%20${encodeURIComponent(orderNumber)}%20and%20Transaction%20ID%3A%20${encodeURIComponent(transactionId)}.%0A%0AThank%20you%21">Contact Support</a>
   </button>
   <button>
     <a href="index.html">Back to Home</a>

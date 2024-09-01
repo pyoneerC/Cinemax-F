@@ -20,13 +20,25 @@
       color: red;
       font-size: 14px;
     }
+    .message {
+      font-size: 16px;
+      margin-top: 10px;
+    }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const total = localStorage.getItem('total') || 0;
+      let total = parseFloat(localStorage.getItem('total')) || 0;
+      let discountedTotal = total;
 
       const summaryElement = document.getElementById('cart-summary');
+      const totalElement = document.getElementById('total-amount');
+      const discountMessageElement = document.getElementById('discount-message');
+      const discountCodeInput = document.getElementById('discount-code');
+      const discountForm = document.getElementById('discount-form');
+      const discountButton = document.getElementById('discount-button');
+      const paymentForm = document.getElementById('payment-form');
+
       if (cart.length > 0) {
         const list = document.createElement('ul');
         cart.forEach(item => {
@@ -35,14 +47,17 @@
           list.appendChild(listItem);
         });
         summaryElement.appendChild(list);
-        summaryElement.innerHTML += `<p>Total: $${total}</p>`;
+        totalElement.textContent = `Total: $${total.toFixed(2)}`;
       } else {
         summaryElement.textContent = 'No items in cart.';
       }
 
-      const paymentFormElement = document.getElementById('payment-form');
+      discountForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        applyDiscount(discountCodeInput.value);
+      });
 
-      paymentFormElement.addEventListener('submit', (event) => {
+      paymentForm.addEventListener('submit', (event) => {
         event.preventDefault();
         if (validateForm()) {
           window.location.href = 'receipt.html';
@@ -76,6 +91,30 @@
         return isValid;
       }
 
+      function applyDiscount(code) {
+        const discountCodes = {
+          'MOVIE30': 0.30,
+          'SUMMER20': 0.20,
+          'WELCOME10': 0.10
+        };
+        if (discountCodes[code]) {
+          discountedTotal = total * (1 - discountCodes[code]);
+          totalElement.textContent = `Total after discount: $${discountedTotal.toFixed(2)}`;
+          discountMessageElement.textContent = `Discount applied! New total: $${discountedTotal.toFixed(2)}`;
+          disableDiscountButton();
+          return true;
+        } else {
+          totalElement.textContent = `Total: $${total.toFixed(2)}`;
+          discountMessageElement.textContent = 'Invalid discount code.';
+        }
+        return false;
+      }
+
+      function disableDiscountButton() {
+        discountButton.disabled = true;
+        discountButton.textContent = 'Discount Applied';
+      }
+
       function showError(fieldId, message) {
         const field = document.getElementById(fieldId);
         const error = document.createElement('div');
@@ -94,8 +133,26 @@
 <h1>Payment</h1>
 
 <div class="summary" id="cart-summary"></div>
+<p id="total-amount" class="summary"></p>
 
-<section id="payment-form">
+<section id="movie-details">
+  <h2>Movie Details</h2>
+  <p><strong>Movie:</strong> The Matrix</p>
+  <p><strong>Time:</strong> 7:00 PM</p>
+  <p><strong>Seats:</strong> ['A1', 'A2', 'A3']</p>
+</section>
+
+<section id="discount-section">
+  <h2>Apply Discount</h2>
+  <form id="discount-form">
+    <label for="discount-code">Discount Code (optional)</label>
+    <input type="text" id="discount-code" name="discount-code">
+    <button type="submit" id="discount-button">Apply Discount</button>
+    <p id="discount-message" class="message"></p>
+  </form>
+</section>
+
+<section id="payment-section">
   <h2>Pay with Card</h2>
   <form id="payment-form" method="post">
     <label for="card-number">Card Number</label>
@@ -112,5 +169,3 @@
 </section>
 </body>
 </html>
-
-<!--TODO: DISCOUNT CODE-->

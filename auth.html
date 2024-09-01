@@ -12,9 +12,7 @@
       const email = form.elements['email'].value;
       const password = form.elements['password'] ? form.elements['password'].value : '';
       const confirmPassword = form.elements['confirm-password'] ? form.elements['confirm-password'].value : '';
-      const queryParams = `?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}${confirmPassword ? `&confirm_password=${encodeURIComponent(confirmPassword)}` : ''}`;
-      const actionUrl = baseUrl + queryParams;
-
+      
       const movieTitle = getQueryParam('movie');
       const movieTime = getQueryParam('time');
 
@@ -44,10 +42,6 @@
       const registerForm = document.getElementById('register-form');
       const resetPasswordForm = document.getElementById('reset-password-form');
 
-      loginForm.addEventListener('submit', (event) => updateFormAction(event, 'login-form', 'http://127.0.0.1:8000/login/'));
-      registerForm.addEventListener('submit', (event) => updateFormAction(event, 'register-form', 'http://127.0.0.1:8000/register/'));
-      resetPasswordForm.addEventListener('submit', (event) => updateFormAction(event, 'reset-password-form', 'http://127.0.0.1:8000/reset_password/'));
-
       const movieTitle = getQueryParam('movie');
       const movieTime = getQueryParam('time');
       if (movieTitle) {
@@ -58,6 +52,12 @@
       }
 
       loginForm.addEventListener('submit', (event) => updateFormAction(event, 'login-form', 'http://127.0.0.1:8000/login/'));
+      if (registerForm) {
+        registerForm.addEventListener('submit', (event) => updateFormAction(event, 'register-form', 'http://127.0.0.1:8000/register/'));
+      }
+      if (resetPasswordForm) {
+        resetPasswordForm.addEventListener('submit', (event) => updateFormAction(event, 'reset-password-form', 'http://127.0.0.1:8000/reset_password/'));
+      }
     });
   </script>
 </head>
@@ -81,3 +81,5 @@
 <br>
 <a href="register.html">Don't have an account? Register here</a>
 
+</body>
+</html>

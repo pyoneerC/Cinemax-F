@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login & Register Forms</title>
   <script>
+    // Function to update form action with parameters and submit it
     function updateFormAction(event, formId, baseUrl) {
       event.preventDefault();
 
@@ -19,6 +20,11 @@
       form.submit();
     }
 
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const loginForm = document.getElementById('login-form');
       const registerForm = document.getElementById('register-form');
@@ -27,61 +33,47 @@
       loginForm.addEventListener('submit', (event) => updateFormAction(event, 'login-form', 'http://127.0.0.1:8000/login/'));
       registerForm.addEventListener('submit', (event) => updateFormAction(event, 'register-form', 'http://127.0.0.1:8000/register/'));
       resetPasswordForm.addEventListener('submit', (event) => updateFormAction(event, 'reset-password-form', 'http://127.0.0.1:8000/reset_password/'));
+      
+      const movieTitle = getQueryParam('movie');
+      if (movieTitle) {
+        document.getElementById('selected-movie').textContent = `Selected Movie: ${movieTitle}`;
+      }
     });
   </script>
 </head>
 <body>
 <h1>Cinemax</h1>
 
+<h2 id="selected-movie">Selected Movie: None</h2>
+
 <h2>Login</h2>
 <form id="login-form" method="post">
-  <label>
-    Email
-  </label>
+  <label>Email</label>
   <input type="email" name="email" required>
-  <label>
-    Password
-  </label>
+  <label>Password</label>
   <input type="password" name="password" required>
   <button type="submit">Login</button>
 </form>
 
-
-  <!--oauth + show messages here, no redirect to api endpoints-->
-
-<p>
-  Forgot your password?
-</p>
+<p>Forgot your password?</p>
 
 <h2>Reset Password</h2>
 <form id="reset-password-form" method="post">
-  <label>
-    Email
-  </label>
+  <label>Email</label>
   <input type="email" name="email" required>
-  <label>
-    Current Password
-  </label>
+  <label>Current Password</label>
   <input type="password" name="password" required>
-  <label>
-    New Password
-  </label>
+  <label>New Password</label>
   <input type="password" name="confirm-password" required>
   <button type="submit">Reset Password</button>
 </form>
 
 <h2 id="register">Register</h2>
-<p>
-  Don't have an account?
-</p>
+<p>Don't have an account?</p>
 <form id="register-form" method="post">
-  <label>
-    Email
-  </label>
+  <label>Email</label>
   <input type="email" name="email" required>
-  <label>
-    Password
-  </label>
+  <label>Password</label>
   <input type="password" name="password" required>
   <button type="submit">Register</button>
 </form>

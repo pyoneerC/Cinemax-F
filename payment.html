@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const stripeForm = document.getElementById('stripe-form');
+      const mercadoPagoForm = document.getElementById('mercado-pago-form');
+      const stripeButton = document.getElementById('stripe-button');
+      const mercadoPagoButton = document.getElementById('mercado-pago-button');
+
+      stripeButton.addEventListener('click', () => {
+        stripeForm.style.display = 'block';
+        mercadoPagoForm.style.display = 'none';
+      });
+
+      mercadoPagoButton.addEventListener('click', () => {
+        mercadoPagoForm.style.display = 'block';
+        stripeForm.style.display = 'none';
+      });
+
+      // Initialize Stripe
+      const stripe = Stripe('your-stripe-publishable-key');
+      const stripeFormElement = document.getElementById('stripe-payment-form');
+      const elements = stripe.elements();
+      const card = elements.create('card');
+      card.mount('#card-element');
+
+      stripeFormElement.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const {token, error} = await stripe.createToken(card);
+        if (error) {
+          console.error(error);
+          alert('Error processing payment.');
+        } else {
+          // Process Stripe payment with the token
+          stripeFormElement.action = `http://127.0.0.1:8000/stripe_payment?token=${token.id}`;
+          stripeFormElement.submit();
+        }
+      });
+
+      // Initialize Mercado Pago
+      const mp = new MercadoPago('your-mercado-pago-public-key', {
+        locale: 'en-US'
+      });
+
+      const mercadoPagoFormElement = document.getElementById('mercado-pago-payment-form');
+
+      mercadoPagoFormElement.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(mercadoPagoFormElement);
+
+        // You might need to initialize Mercado Pago's checkout here
+        mp.checkout({
+          preference: {
+            id: 'YOUR_PREFERENCE_ID'
+          }
+        }).then((response) => {
+          // Process Mercado Pago payment
+          const queryParams = new URLSearchParams(formData).toString();
+          mercadoPagoFormElement.action = `http://127.0.0.1:8000/mercado_pago_payment?${queryParams}`;
+          mercadoPagoFormElement.submit();
+        }).catch(error => {
+          console.error('Error processing Mercado Pago payment:', error);
+          alert('Error processing payment.');
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+<h1>Payment</h1>
+
+<div>
+  <button id="stripe-button" type="button">Pay with Card</button>
+  <button id="mercado-pago-button" type="button">Pay with Mercado Pago</button>
+</div>
+
+<section id="stripe-form" style="display: none;">
+  <h2>Pay with Card</h2>
+  <form id="stripe-payment-form" method="post">
+    <div id="card-element">
+      <!-- A Stripe Element will be inserted here. -->
+    </div>
+    <button type="submit">Submit Payment</button>
+  </form>
+</section>
+
+<section id="mercado-pago-form" style="display: none;">
+  <h2>Pay with Mercado Pago</h2>
+  <form id="mercado-pago-payment-form" method="post">
+    <label for="mercado-pago-email">Email</label>
+    <input type="email" id="mercado-pago-email" name="email" required>
+
+    <label for="mercado-pago-account">Account</label>
+    <input type="text" id="mercado-pago-account" name="account" required>
+
+    <button type="submit">Submit Payment</button>
+  </form>
+</section>
+</body>
+</html>

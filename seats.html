@@ -60,6 +60,7 @@
     .gap {
       width: 40px;
       height: 40px;
+      cursor: not-allowed;
     }
     .vip {
       background-color: #ffd700;
@@ -204,7 +205,7 @@
 
   document.querySelectorAll('.seat').forEach(seat => {
     seat.addEventListener('click', () => {
-      if (seat.classList.contains('unavailable')) return;
+      if (seat.classList.contains('unavailable') || seat.classList.contains('gap')) return;
 
       if (seat.classList.contains('selected')) {
         seat.classList.remove('selected');

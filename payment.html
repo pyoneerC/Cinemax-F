@@ -45,7 +45,7 @@
       paymentFormElement.addEventListener('submit', (event) => {
         event.preventDefault();
         if (validateForm()) {
-          alert('Payment processed successfully with dummy card!');
+          window.location.href = 'receipt.html';
         }
       });
 

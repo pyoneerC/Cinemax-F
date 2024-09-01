@@ -2,16 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
   <title>Seat Selection</title>
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .screen-container {
+      text-align: center;
+      margin: 20px;
+    }
+    .screen {
+      background-color: #ddd;
+      padding: 10px;
+      border: 2px solid #333;
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 1.2em;
+      display: inline-block;
+    }
+    .seat-container {
+      text-align: center;
+      margin: 20px;
+    }
+    .seat-row {
+      display: flex;
+      justify-content: center;
+      margin: 5px 0;
+    }
     .seat {
       display: inline-block;
       width: 40px;
@@ -38,15 +57,39 @@
       background-color: #e0e0e0;
       color: #333;
     }
-    .seat-container {
+    .gap {
+      width: 40px;
+      height: 40px;
+    }
+    .vip {
+      background-color: #ffd700;
+      color: #333;
+      border-color: #ffd700;
+    }
+    .vip-row {
+      text-align: center;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .mission-row {
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .separator {
+      height: 2px;
+      background-color: #333;
+      margin: 20px 0;
+    }
+    .controls {
       text-align: center;
       margin: 20px;
     }
-    .row {
-      margin: 10px 0;
-    }
     button {
       margin-top: 10px;
+    }
+    h1 {
+      text-align: center;
+      margin: 20px;
     }
   </style>
 </head>
@@ -54,45 +97,121 @@
 
 <h1>Select Your Seats</h1>
 
+<div class="screen-container">
+  <div class="screen">Screen</div>
+</div>
+
 <div class="seat-container">
-  <div class="row">
+  <!-- Regular Seating -->
+  <div class="seat-row">
     <div class="seat available" data-seat="A1">A1</div>
-    <div class="seat available" data-seat="A2">A2</div>
-    <div class="seat available" data-seat="A3">A3</div>
-    <div class="seat unavailable" data-seat="A4">A4</div>
+    <div class="seat unavailable" data-seat="A2">A2</div>
+    <div class="seat gap"></div>
+    <div class="seat available" data-seat="A4">A4</div>
+    <div class="seat unavailable" data-seat="A5">A5</div>
+    <div class="seat gap"></div>
+    <div class="seat unavailable" data-seat="A7">A7</div>
+    <div class="seat gap"></div>
+    <div class="seat available" data-seat="A8">A8</div>
+    <div class="seat available" data-seat="A9">A9</div>
+    <div class="seat available" data-seat="A10">A10</div>
   </div>
-  <div class="row">
-    <div class="seat available" data-seat="B1">B1</div>
+  <div class="seat-row">
+    <div class="seat unavailable" data-seat="B1">B1</div>
     <div class="seat available" data-seat="B2">B2</div>
-    <div class="seat selected" data-seat="B3">B3</div>
+    <div class="seat gap"></div>
     <div class="seat available" data-seat="B4">B4</div>
+    <div class="seat unavailable" data-seat="B5">B5</div>
+    <div class="seat gap"></div>
+    <div class="seat available" data-seat="B7">B7</div>
+    <div class="seat gap"></div>
+    <div class="seat unavailable" data-seat="B8">B8</div>
+    <div class="seat available" data-seat="B9">B9</div>
+    <div class="seat available" data-seat="B10">B10</div>
   </div>
-  <div class="row">
+  <div class="seat-row">
     <div class="seat available" data-seat="C1">C1</div>
-    <div class="seat available" data-seat="C2">C2</div>
-    <div class="seat available" data-seat="C3">C3</div>
-    <div class="seat available" data-seat="C4">C4</div>
+    <div class="seat unavailable" data-seat="C2">C2</div>
+    <div class="seat gap"></div>
+    <div class="seat unavailable" data-seat="C4">C4</div>
+    <div class="seat unavailable" data-seat="C5">C5</div>
+    <div class="seat gap"></div>
+    <div class="seat available" data-seat="C7">C7</div>
+    <div class="seat gap"></div>
+    <div class="seat unavailable" data-seat="C8">C8</div>
+    <div class="seat available" data-seat="C9">C9</div>
+    <div class="seat available" data-seat="C10">C10</div>
+  </div>
+
+  <div class="seat-row">
+    <div class="seat available" data-seat="E1">E1</div>
+    <div class="seat available" data-seat="E2">E2</div>
+    <div class="seat gap"></div>
+    <div class="seat unavailable" data-seat="E4">E4</div>
+    <div class="seat available" data-seat="E5">E5</div>
+    <div class="seat gap"></div>
+    <div class="seat available" data-seat="E7">E7</div>
+    <div class="seat gap"></div>
+    <div class="seat available" data-seat="E8">E8</div>
+    <div class="seat available" data-seat="E9">E9</div>
+    <div class="seat available" data-seat="E10">E10</div>
+  </div>
+
+  <!-- Separator -->
+  <div class="separator"></div>
+
+  <!-- Mission Row -->
+  <div class="seat-row mission-row">
+    <div class="seat available" data-seat="F1">F1</div>
+    <div class="seat unavailable" data-seat="F2">F2</div>
+    <div class="seat gap"></div>
+    <div class="seat available" data-seat="F4">F4</div>
+    <div class="seat unavailable" data-seat="F5">F5</div>
+    <div class="seat gap"></div>
+    <div class="seat available" data-seat="F7">F7</div>
+    <div class="seat gap"></div>
+    <div class="seat unavailable" data-seat="F8">F8</div>
+    <div class="seat available" data-seat="F9">F9</div>
+    <div class="seat available" data-seat="F10">F10</div>
+  </div>
+
+  <!-- VIP Seating -->
+  <div class="seat-row vip-row">
+    <div class="seat unavailable" data-seat="G1">G1</div>
+    <div class="seat available" data-seat="G2">G2</div>
+    <div class="seat gap"></div>
+    <div class="seat unavailable" data-seat="G4">G4</div>
+    <div class="seat vip" data-seat="G5">G5</div>
+    <div class="seat gap"></div>
+    <div class="seat vip" data-seat="G7">G7</div>
+    <div class="seat gap"></div>
+    <div class="seat unavailable" data-seat="G8">G8</div>
+    <div class="seat unavailable" data-seat="G9">G9</div>
+    <div class="seat available" data-seat="G10">G10</div>
   </div>
 </div>
 
-<p id="selected-seats">Selected Seats: None</p>
-<button id="continue-button" onclick="proceedToNextStep()">Continue</button>
+<div class="controls">
+  <p id="selected-seats">Selected Seats: None</p>
+  <p id="seats-remaining">Seats Remaining: <span id="seats-count">3</span></p>
+  <button id="continue-button" onclick="proceedToNextStep()" disabled>Continue</button>
+</div>
 
 <script>
-  const seats = document.querySelectorAll('.seat');
+  const maxSeats = 3;  // Maximum number of seats allowed to select
   let selectedSeats = [];
 
-  seats.forEach(seat => {
+  document.querySelectorAll('.seat').forEach(seat => {
     seat.addEventListener('click', () => {
       if (seat.classList.contains('unavailable')) return;
 
-      seat.classList.toggle('selected');
-      const seatNumber = seat.getAttribute('data-seat');
-
       if (seat.classList.contains('selected')) {
-        selectedSeats.push(seatNumber);
+        seat.classList.remove('selected');
+        selectedSeats = selectedSeats.filter(seatNumber => seatNumber !== seat.getAttribute('data-seat'));
       } else {
-        selectedSeats = selectedSeats.filter(seat => seat !== seatNumber);
+        if (selectedSeats.length >= maxSeats) return;  // Prevent selecting more than allowed
+        seat.classList.add('selected');
+        selectedSeats.push(seat.getAttribute('data-seat'));
       }
 
       updateSelectedSeats();
@@ -101,7 +220,12 @@
 
   function updateSelectedSeats() {
     const selectedSeatsDisplay = document.getElementById('selected-seats');
+    const seatsCountDisplay = document.getElementById('seats-count');
+    const continueButton = document.getElementById('continue-button');
     selectedSeatsDisplay.textContent = `Selected Seats: ${selectedSeats.join(', ') || 'None'}`;
+    const seatsRemaining = maxSeats - selectedSeats.length;
+    seatsCountDisplay.textContent = seatsRemaining;
+    continueButton.disabled = selectedSeats.length === 0;
   }
 
   function proceedToNextStep() {
@@ -112,10 +236,6 @@
     }
   }
 </script>
-
-</body>
-</html>
-
 
 </body>
 </html>

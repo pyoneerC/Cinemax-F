@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Payment</title>
-  <script src="https://js.stripe.com/v3/"></script>
-  <script src="https://sdk.mercadopago.com/js/v2"></script>
   <style>
     .summary {
       margin: 20px;
@@ -17,6 +15,10 @@
     }
     .summary li {
       margin-bottom: 10px;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
     }
   </style>
   <script>
@@ -38,62 +40,53 @@
         summaryElement.textContent = 'No items in cart.';
       }
 
-      const stripeForm = document.getElementById('stripe-form');
-      const mercadoPagoForm = document.getElementById('mercado-pago-form');
-      const stripeButton = document.getElementById('stripe-button');
-      const mercadoPagoButton = document.getElementById('mercado-pago-button');
+      const paymentFormElement = document.getElementById('payment-form');
 
-      stripeButton.addEventListener('click', () => {
-        stripeForm.style.display = 'block';
-        mercadoPagoForm.style.display = 'none';
-      });
-
-      mercadoPagoButton.addEventListener('click', () => {
-        mercadoPagoForm.style.display = 'block';
-        stripeForm.style.display = 'none';
-      });
-
-      const stripe = Stripe('your-stripe-publishable-key');
-      const stripeFormElement = document.getElementById('stripe-payment-form');
-      const elements = stripe.elements();
-      const card = elements.create('card');
-      card.mount('#card-element');
-
-      stripeFormElement.addEventListener('submit', async (event) => {
+      paymentFormElement.addEventListener('submit', (event) => {
         event.preventDefault();
-        const {token, error} = await stripe.createToken(card);
-        if (error) {
-          console.error(error);
-          alert('Error processing payment.');
-        } else {
-          stripeFormElement.action = `http://127.0.0.1:8000/stripe_payment?token=${token.id}`;
-          stripeFormElement.submit();
+        if (validateForm()) {
+          alert('Payment processed successfully with dummy card!');
         }
       });
 
-      const mp = new MercadoPago('your-mercado-pago-public-key', {
-        locale: 'en-US'
-      });
+      function validateForm() {
+        const cardNumber = document.getElementById('card-number').value;
+        const cardExpiry = document.getElementById('card-expiry').value;
+        const cardCvc = document.getElementById('card-cvc').value;
 
-      const mercadoPagoFormElement = document.getElementById('mercado-pago-payment-form');
+        clearErrors();
 
-      mercadoPagoFormElement.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const formData = new FormData(mercadoPagoFormElement);
+        let isValid = true;
 
-        mp.checkout({
-          preference: {
-            id: 'YOUR_PREFERENCE_ID'
-          }
-        }).then((response) => {
-          const queryParams = new URLSearchParams(formData).toString();
-          mercadoPagoFormElement.action = `http://127.0.0.1:8000/mercado_pago_payment?${queryParams}`;
-          mercadoPagoFormElement.submit();
-        }).catch(error => {
-          console.error('Error processing Mercado Pago payment:', error);
-          alert('Error processing payment.');
-        });
-      });
+        if (!/^\d{16}$/.test(cardNumber)) {
+          showError('card-number', 'Card number must be 16 digits.');
+          isValid = false;
+        }
+
+        if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(cardExpiry)) {
+          showError('card-expiry', 'Expiry date must be in MM/YY format.');
+          isValid = false;
+        }
+
+        if (!/^\d{3}$/.test(cardCvc)) {
+          showError('card-cvc', 'CVC must be 3 digits.');
+          isValid = false;
+        }
+
+        return isValid;
+      }
+
+      function showError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        const error = document.createElement('div');
+        error.className = 'error';
+        error.textContent = message;
+        field.parentElement.appendChild(error);
+      }
+
+      function clearErrors() {
+        document.querySelectorAll('.error').forEach(error => error.remove());
+      }
     });
   </script>
 </head>
@@ -102,28 +95,17 @@
 
 <div class="summary" id="cart-summary"></div>
 
-<div>
-  <button id="stripe-button" type="button">Pay with Card</button>
-  <button id="mercado-pago-button" type="button">Pay with Mercado Pago</button>
-</div>
-
-<section id="stripe-form" style="display: none;">
+<section id="payment-form">
   <h2>Pay with Card</h2>
-  <form id="stripe-payment-form" method="post">
-    <div id="card-element">
-    </div>
-    <button type="submit">Submit Payment</button>
-  </form>
-</section>
+  <form id="payment-form" method="post">
+    <label for="card-number">Card Number</label>
+    <input type="text" id="card-number" name="card-number" required>
 
-<section id="mercado-pago-form" style="display: none;">
-  <h2>Pay with Mercado Pago</h2>
-  <form id="mercado-pago-payment-form" method="post">
-    <label for="mercado-pago-email">Email</label>
-    <input type="email" id="mercado-pago-email" name="email" required>
+    <label for="card-expiry">Expiry Date (MM/YY)</label>
+    <input type="text" id="card-expiry" name="card-expiry" required>
 
-    <label for="mercado-pago-account">Account</label>
-    <input type="text" id="mercado-pago-account" name="account" required>
+    <label for="card-cvc">CVC</label>
+    <input type="text" id="card-cvc" name="card-cvc" required>
 
     <button type="submit">Submit Payment</button>
   </form>

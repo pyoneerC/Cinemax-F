@@ -26,6 +26,23 @@
     .details {
       margin: 20px 0;
     }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+    }
+    button a {
+      color: white;
+      text-decoration: none;
+    }
+    .contact-button {
+      background-color: #28a745;
+    }
   </style>
 </head>
 <body>
@@ -39,16 +56,46 @@
   </div>
 
   <div class="details">
-    <p><strong>Order Number:</strong> #1234567890</p>
+    <p><strong>Order Number:</strong> <span id="order-number"></span></p>
     <p><strong>Amount:</strong> $69</p>
-    <p><strong>Date:</strong> September 1, 2024</p>
-    <p><strong>Transaction ID:</strong> abcdef123456</p>
+    <p><strong>Date:</strong> <span id="current-date"></span></p>
+    <p><strong>Transaction ID:</strong> <span id="transaction-id"></span></p>
   </div>
 
   <p>If you have any questions or need assistance, please contact our support team.</p>
+
+  <button class="contact-button">
+    <a href="mailto:maxcomperatore@gmail.com?subject=Support Request&body=Hello%20Maximo%2C%0A%0AI%20need%20assistance%20regarding%20the%20recent%20payment%20with%20Order%20Number%3A%20%5BOrder%20Number%5D%20and%20Transaction%20ID%3A%20%5BTransaction%20ID%5D.%0A%0AThank%20you%21">Contact Support</a>
+  </button>
   <button>
     <a href="index.html">Back to Home</a>
   </button>
 </div>
+
+<script>
+  function generateRandomOrderNumber() {
+    return 'ORD_' + Math.floor(Math.random() * 1000000000);
+  }
+
+  function generateTransactionId() {
+    return 'TX_' + Math.random().toString(36).substr(2, 9).toUpperCase();
+  }
+
+  function formatDate(date) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString(undefined, options);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const orderNumber = generateRandomOrderNumber();
+    const transactionId = generateTransactionId();
+    document.getElementById('order-number').textContent = orderNumber;
+    document.getElementById('transaction-id').textContent = transactionId;
+    document.getElementById('current-date').textContent = formatDate(new Date());
+
+    const mailtoLink = document.querySelector('.contact-button a');
+    mailtoLink.href = `mailto:maxcomperatore@gmail.com?subject=Support Request&body=Hello%20Maximo%2C%0A%0AI%20need%20assistance%20regarding%20the%20recent%20payment%20with%20Order%20Number%3A%20${encodeURIComponent(orderNumber)}%20and%20Transaction%20ID%3A%20${encodeURIComponent(transactionId)}.%0A%0AThank%20you%21`;
+  });
+</script>
 </body>
 </html>

@@ -4,6 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register</title>
+  <style>
+    #response-message {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+  </style>
 </head>
 <body>
 
@@ -18,8 +30,10 @@
   <button type="submit">Register</button>
 </form>
 
+<p id="response-message"></p> <!-- Element to display server response -->
+
 <script>
-  function updateFormAction(event, formId, baseUrl) {
+  async function updateFormAction(event, formId, baseUrl) {
     event.preventDefault();
 
     const form = document.getElementById(formId);
@@ -38,8 +52,29 @@
     }
 
     const actionUrl = baseUrl + queryParams;
-    form.action = actionUrl;
-    form.submit();
+
+    try {
+      const response = await fetch(actionUrl, {
+        method: 'POST',
+        body: new URLSearchParams(new FormData(form)),
+      });
+
+      const result = await response.json();
+      const messageElement = document.getElementById('response-message');
+
+      if (response.ok) {
+        messageElement.textContent = result.message || 'Success';
+        messageElement.className = 'success';
+      } else {
+        messageElement.textContent = result.detail || 'Error occurred';
+        messageElement.className = 'error';
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      const messageElement = document.getElementById('response-message');
+      messageElement.textContent = 'Network error, please try again later.';
+      messageElement.className = 'error';
+    }
   }
 
   function getQueryParam(param) {
@@ -60,10 +95,17 @@
     }
 
     if (registerForm) {
-      registerForm.addEventListener('submit', (event) => updateFormAction(event, 'register-form', 'http://127.0.0.1:8000/register/'));
+      registerForm.addEventListener('submit', (event) => updateFormAction(event, 'register-form', 'http://127.0.0.1:8000/register'));
     }
   });
 </script>
+
+<br>
+<a href="auth.html">
+  <button>
+    Have an account? Login here
+  </button>
+</a>
 
 </body>
 </html>

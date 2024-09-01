@@ -37,7 +37,7 @@
 
         if (response.ok) {
           const result = await response.json();
-          if (result.message === 'Login successful') {
+          if (result.message) {
             window.location.href = 'tickets.html';
           } else {
             alert(result.message || 'Login failed');

@@ -30,7 +30,9 @@
   <button type="submit">Register</button>
 </form>
 
-<p id="response-message"></p> <!-- Element to display server response -->
+<p id="response-message"></p>
+<p id="selected-movie"></p>
+<p id="selected-time"></p>
 
 <script>
   async function updateFormAction(event, formId, baseUrl) {
@@ -56,6 +58,9 @@
     try {
       const response = await fetch(actionUrl, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
         body: new URLSearchParams(new FormData(form)),
       });
 
@@ -65,6 +70,7 @@
       if (response.ok) {
         messageElement.textContent = result.message || 'Success';
         messageElement.className = 'success';
+        form.reset();
       } else {
         messageElement.textContent = result.detail || 'Error occurred';
         messageElement.className = 'error';
@@ -101,11 +107,13 @@
 </script>
 
 <br>
-<a href="auth.html">
-  <button>
-    Have an account? Login here
-  </button>
-</a>
+<button id="back-button">Have an account? Login here</button>
+
+<script>
+  document.getElementById('back-button').addEventListener('click', () => {
+    window.history.back();
+  });
+</script>
 
 </body>
 </html>

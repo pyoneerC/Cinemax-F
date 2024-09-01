@@ -15,6 +15,21 @@
       const queryParams = `?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}${confirmPassword ? `&confirm_password=${encodeURIComponent(confirmPassword)}` : ''}`;
       const actionUrl = baseUrl + queryParams;
 
+      const movieTitle = getQueryParam('movie');
+      const movieTime = getQueryParam('time');
+
+      let queryParams = `?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+      if (confirmPassword) {
+        queryParams += `&confirm_password=${encodeURIComponent(confirmPassword)}`;
+      }
+      if (movieTitle) {
+        queryParams += `&movie=${encodeURIComponent(movieTitle)}`;
+      }
+      if (movieTime) {
+        queryParams += `&time=${encodeURIComponent(movieTime)}`;
+      }
+
+      const actionUrl = baseUrl + queryParams;
       form.action = actionUrl;
       form.submit();
     }
@@ -41,6 +56,8 @@
       if (movieTime) {
         document.getElementById('selected-time').textContent = `Selected Time: ${movieTime}`;
       }
+
+      loginForm.addEventListener('submit', (event) => updateFormAction(event, 'login-form', 'http://127.0.0.1:8000/login/'));
     });
   </script>
 </head>

@@ -92,6 +92,12 @@
       text-align: center;
       margin: 20px;
     }
+    .countdown {
+      font-size: 18px;
+      color: red;
+      font-weight: bold;
+      margin: 20px;
+    }
   </style>
 </head>
 <body>
@@ -103,7 +109,6 @@
 </div>
 
 <div class="seat-container">
-  <!-- Regular Seating -->
   <div class="seat-row">
     <div class="seat available" data-seat="A1">A1</div>
     <div class="seat unavailable" data-seat="A2">A2</div>
@@ -192,10 +197,13 @@
   </div>
 </div>
 
+<div class="separator"></div>
+
 <div class="controls">
   <p id="selected-seats">Selected Seats: None</p>
   <p id="seats-remaining">Seats Remaining: <span id="seats-count"></span></p>
   <button id="continue-button" onclick="proceedToNextStep()" disabled>Continue</button>
+  <p id="countdown" class="countdown"></p>
 </div>
 
 <script>
@@ -252,9 +260,48 @@
       alert('Please select all the required seats!');
     }
   }
+
+  function resetTimer() {
+    const now = new Date().getTime();
+    localStorage.setItem('timerStart', now);
+  }
+
+  function checkTimer() {
+    const timerStart = parseInt(localStorage.getItem('timerStart'), 10);
+    if (isNaN(timerStart)) {
+      resetTimer();
+      return;
+    }
+
+    const now = new Date().getTime();
+    const elapsedTime = now - timerStart;
+    const TIMER_DURATION = 5 * 60 * 1000;
+
+    if (elapsedTime > TIMER_DURATION) {
+      alert('Timer expired!');
+      window.location.href = 'index.html';
+    } else {
+      updateCountdown(TIMER_DURATION - elapsedTime);
+    }
+  }
+
+  function updateCountdown(remainingTime) {
+    const countdownElement = document.getElementById('countdown');
+    const minutes = Math.floor(remainingTime / 60000);
+    const seconds = Math.floor((remainingTime % 60000) / 1000);
+    countdownElement.textContent = `Time Remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    checkTimer();
+    setInterval(() => {
+      const remainingTime = 5 * 60 * 1000 - (new Date().getTime() - parseInt(localStorage.getItem('timerStart'), 10));
+      if (remainingTime > 0) {
+        updateCountdown(remainingTime);
+      }
+    }, 1000);
+  });
 </script>
-
-
 
 </body>
 </html>

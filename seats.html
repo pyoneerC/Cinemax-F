@@ -231,6 +231,7 @@
   function proceedToNextStep() {
     if (selectedSeats.length > 0) {
       alert(`Proceeding with selected seats: ${selectedSeats.join(', ')}`);
+      window.location.href = 'payment.html';
     } else {
       alert('No seats selected!');
     }

@@ -37,13 +37,13 @@
 
         if (response.ok) {
           const result = await response.json();
-          if (result.success) {
+          if (result.message === 'Login successful') {
             window.location.href = 'tickets.html';
           } else {
             alert(result.message || 'Login failed');
           }
         } else {
-          alert('Server error, please try again later.');
+          alert('Username or password is incorrect.');
         }
       } catch (error) {
         alert('Network error, please try again later.');

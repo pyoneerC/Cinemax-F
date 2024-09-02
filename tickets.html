@@ -137,10 +137,30 @@
       localStorage.setItem('cart', JSON.stringify(cart));
       localStorage.setItem('total', total);
       localStorage.setItem('totalSeats', totalSeats);
-      window.location.href = 'seats.html';
+
+      sendTicketData(totalSeats)
+        .then(() => {
+          window.location.href = 'seats.html';
+        })
+        .catch((error) => {
+          console.error('Error sending ticket data:', error);
+          alert('There was an error processing your request. Please try again.');
+        });
     } else {
       alert('Your cart is empty!');
     }
+  }
+
+  function sendTicketData(totalSeats) {
+    return fetch(`http://127.0.0.1:8000/tickets?num=${totalSeats}`, {
+      method: 'POST',
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok.');
+        }
+        return response.json();
+      });
   }
 
   function disableButton(buttonId) {

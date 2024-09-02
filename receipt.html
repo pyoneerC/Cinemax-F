@@ -106,13 +106,9 @@
 </div>
 
 <script>
-  function generateRandomOrderNumber() {
-    return 'ORD_' + Math.floor(Math.random() * 1000000000);
-  }
-
-  function generateTransactionId() {
-    return 'TX_' + Math.random().toString(36).substr(2, 9).toUpperCase();
-  }
+  document.addEventListener('DOMContentLoaded', () => {
+    localStorage.clear();
+  });
 
   function formatDate(date) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };

@@ -26,10 +26,13 @@
     }
   </style>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
       let total = parseFloat(localStorage.getItem('total')) || 0;
       let discountedTotal = total;
+
+      const transaction_id = localStorage.getItem('transaction_id');
+      const order_id = localStorage.getItem('order_id');
 
       const summaryElement = document.getElementById('cart-summary');
       const totalElement = document.getElementById('total-amount');
@@ -38,7 +41,32 @@
       const discountForm = document.getElementById('discount-form');
       const discountButton = document.getElementById('discount-button');
       const paymentForm = document.getElementById('payment-form');
+      const movieDetailsElement = document.getElementById('movie-details');
 
+      try {
+        if (order_id && transaction_id) {
+          const response = await fetch(`http://127.0.0.1:8000/reservation-details?transaction_id=${transaction_id}&order_id=${order_id}`);
+          if (response.ok) {
+            const reservation = await response.json();
+
+            movieDetailsElement.innerHTML = `
+          <h2>Movie Details</h2>
+          <p><strong>Movie:</strong><code> ${reservation.movie}</code></p>
+          <p><strong>Date:</strong><code> ${reservation.reservation_date}</code></p>
+          <p><strong>Time:</strong><code> ${reservation.reservation_time}</code></p>
+          <p><strong>Seats:</strong><code> ${reservation.seats}</code></p>
+        `;
+          } else {
+            movieDetailsElement.innerHTML = '<p class="error">Failed to fetch reservation details.</p>';
+          }
+        } else {
+          throw new Error('Transaction ID or Order ID not found in local storage.');
+        }
+      } catch (error) {
+        movieDetailsElement.innerHTML = `<p class="error">${error.message}</p>`;
+      }
+
+      // Display cart and total summary
       if (cart.length > 0) {
         const list = document.createElement('ul');
         cart.forEach(item => {
@@ -52,14 +80,17 @@
         summaryElement.textContent = 'No items in cart.';
       }
 
+      // Apply discount
       discountForm.addEventListener('submit', (event) => {
         event.preventDefault();
         applyDiscount(discountCodeInput.value);
       });
 
+      // Payment form submission
       paymentForm.addEventListener('submit', (event) => {
         event.preventDefault();
         if (validateForm()) {
+          localStorage.clear();  // Clear local storage after successful payment
           window.location.href = 'receipt.html';
         }
       });
@@ -137,9 +168,6 @@
 
 <section id="movie-details">
   <h2>Movie Details</h2>
-  <p><strong>Movie:</strong> The Matrix</p>
-  <p><strong>Time:</strong> 7:00 PM</p>
-  <p><strong>Seats:</strong> ['A1', 'A2', 'A3']</p>
 </section>
 
 <section id="discount-section">

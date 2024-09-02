@@ -152,7 +152,8 @@
   }
 
   function sendTicketData(totalSeats) {
-    return fetch(`http://127.0.0.1:8000/tickets?num=${totalSeats}`, {
+    const savedEmail = localStorage.getItem('userEmail');
+    return fetch(`http://127.0.0.1:8000/tickets?num=${totalSeats}&email=${savedEmail}`, {
       method: 'POST',
     })
       .then(response => {

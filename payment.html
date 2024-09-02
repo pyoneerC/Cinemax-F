@@ -43,6 +43,14 @@
       const paymentForm = document.getElementById('payment-form');
       const movieDetailsElement = document.getElementById('movie-details');
 
+      // Function to disable all buttons
+      function disableAllButtons() {
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+          button.disabled = true;
+        });
+      }
+
       try {
         if (order_id && transaction_id) {
           const response = await fetch(`http://127.0.0.1:8000/reservation-details?transaction_id=${transaction_id}&order_id=${order_id}`);
@@ -50,12 +58,12 @@
             const reservation = await response.json();
 
             movieDetailsElement.innerHTML = `
-          <h2>Movie Details</h2>
-          <p><strong>Movie:</strong><code> ${reservation.movie}</code></p>
-          <p><strong>Date:</strong><code> ${reservation.reservation_date}</code></p>
-          <p><strong>Time:</strong><code> ${reservation.reservation_time}</code></p>
-          <p><strong>Seats:</strong><code> ${reservation.seats}</code></p>
-        `;
+              <h2>Movie Details</h2>
+              <p><strong>Movie:</strong><code> ${reservation.movie}</code></p>
+              <p><strong>Date:</strong><code> ${reservation.reservation_date}</code></p>
+              <p><strong>Time:</strong><code> ${reservation.reservation_time}</code></p>
+              <p><strong>Seats:</strong><code> ${reservation.seats}</code></p>
+            `;
           } else {
             movieDetailsElement.innerHTML = '<p class="error">Failed to fetch reservation details.</p>';
           }
@@ -64,6 +72,7 @@
         }
       } catch (error) {
         movieDetailsElement.innerHTML = `<p class="error">${error.message}</p>`;
+        disableAllButtons();  // Disable all buttons if there's an error
       }
 
       // Display cart and total summary

@@ -19,9 +19,49 @@
           <p>Email: ${data.email}</p>
           <p>Created At: ${data.created_at}</p>
           <p>ID: ${data.id}</p>
+          <p>Username: ${data.username || 'N/A'}</p>
+          <p>First Name: ${data.first_name || 'N/A'}</p>
+          <p>Last Name: ${data.last_name || 'N/A'}</p>
+          <p>Phone Number: ${data.phone_number || 'N/A'}</p>
+          <p>Email Verified: ${data.is_email_verified ? 'Yes' : 'No'}</p>
         `;
       } catch (error) {
         document.getElementById('user-info').innerHTML = `<p style="color: red;">${error.message}</p>`;
+      }
+    }
+
+    async function updateUserProfile() {
+      const email = document.getElementById('update-email').value;
+      const password = document.getElementById('update-password').value;
+      const username = document.getElementById('username').value || null;
+      const first_name = document.getElementById('first-name').value || null;
+      const last_name = document.getElementById('last-name').value || null;
+      const phone_number = document.getElementById('phone-number').value || null;
+      const is_email_verified = document.getElementById('is-email-verified').checked;
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/profile', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email,
+            password,
+            username,
+            first_name,
+            last_name,
+            phone_number,
+            is_email_verified
+          })
+        });
+        if (!response.ok) {
+          throw new Error('Update failed');
+        }
+        const result = await response.json();
+        document.getElementById('update-message').innerText = 'Profile updated successfully!';
+      } catch (error) {
+        document.getElementById('update-message').innerText = `Error: ${error.message}`;
       }
     }
 
@@ -34,6 +74,8 @@
 </head>
 <body>
 <h1>User Profile</h1>
+
+<!-- Fetch User Profile -->
 <form onsubmit="event.preventDefault(); fetchUserProfile();">
   <label for="email">Email:</label>
   <input type="text" id="email" name="email" required>
@@ -44,9 +86,40 @@
   <br>
   <button type="submit">Get Profile</button>
 </form>
+
+<!-- Update User Profile -->
+<form onsubmit="event.preventDefault(); updateUserProfile();">
+  <h2>Update Profile</h2>
+  <label for="update-email">Email:</label>
+  <input type="text" id="update-email" name="update-email" required>
+  <br>
+  <label for="update-password">Password:</label>
+  <input type="password" id="update-password" name="update-password" required>
+  <br>
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username">
+  <br>
+  <label for="first-name">First Name:</label>
+  <input type="text" id="first-name" name="first-name">
+  <br>
+  <label for="last-name">Last Name:</label>
+  <input type="text" id="last-name" name="last-name">
+  <br>
+  <label for="phone-number">Phone Number:</label>
+  <input type="text" id="phone-number" name="phone-number">
+  <br>
+  <label for="is-email-verified">Email Verified:</label>
+  <input type="checkbox" id="is-email-verified" name="is-email-verified">
+  <br>
+  <button type="submit">Update Profile</button>
+  <p id="update-message"></p>
+</form>
+
 <div id="user-info"></div>
+
 <button id="back-button">
   Go back
 </button>
 </body>
 </html>
+

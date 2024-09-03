@@ -9,7 +9,7 @@
 
 <div class="profile">
   <a href="profile.html">
-    <img src="https://placebear.com/80/80" alt="Profile Picture">
+    <img src="img/User.avif" alt="Profile Picture">
     <div class="status-indicator"></div>
   </a>
 </div>
@@ -44,13 +44,17 @@
       </li>
     </ul>
 
+    <button id="continue-button" onclick="continueToCheckout()">Continue</button>
+    <p id="countdown" class="countdown"></p>
+
     <h2>Cart</h2>
     <ul id="cart"></ul>
     <p id="total"></p>
-
-    <button id="continue-button" onclick="continueToCheckout()">Continue</button>
-    <p id="countdown" class="countdown"></p>
   </div>
+
+  <a href="javascript:void(0);" onclick="window.history.back()">Go Back</a>
+  <br>
+  <a href="javascript:void(0);" onclick="location.reload()">Clear Cart</a>
 </div>
 
 <script>
@@ -170,7 +174,6 @@
 </script>
 
 <br>
-<a href="javascript:void(0);" onclick="window.history.back()">Go Back</a>
 
 </body>
 </html>

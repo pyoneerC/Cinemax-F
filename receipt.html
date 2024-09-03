@@ -126,6 +126,20 @@
     }
   }
 
+  async function PushPaymentStatus(transaction_id, order_id) {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/payment-status?transaction_id=${transaction_id}&order_id=${order_id}`, {
+        method: 'POST'
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+    } catch (error) {
+      console.error('Error fetching reservation details:', error);
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     const transaction_id = localStorage.getItem('transaction_id');
     const order_id = localStorage.getItem('order_id');
@@ -135,6 +149,8 @@
     } else {
       console.error('Transaction ID or Order ID not found in local storage.');
     }
+
+    PushPaymentStatus(transaction_id, order_id);
 
     document.getElementById('current-date').textContent = formatDate(new Date());
 

@@ -3,6 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>User Profile</title>
+  <style>
+    .message {
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  </style>
   <script>
     async function fetchUserProfile() {
       const email = document.getElementById('email').value;
@@ -26,42 +41,33 @@
           <p>Email Verified: ${data.is_email_verified ? 'Yes' : 'No'}</p>
         `;
       } catch (error) {
-        document.getElementById('user-info').innerHTML = `<p style="color: red;">${error.message}</p>`;
+        document.getElementById('user-info').innerHTML = `<p class="message error">${error.message}</p>`;
       }
     }
 
     async function updateUserProfile() {
       const email = document.getElementById('update-email').value;
       const password = document.getElementById('update-password').value;
-      const username = document.getElementById('username').value || null;
-      const first_name = document.getElementById('first-name').value || null;
-      const last_name = document.getElementById('last-name').value || null;
-      const phone_number = document.getElementById('phone-number').value || null;
+      const username = document.getElementById('username').value || 'N/A';
+      const first_name = document.getElementById('first-name').value || 'N/A';
+      const last_name = document.getElementById('last-name').value || 'N/A';
+      const phone_number = document.getElementById('phone-number').value || 'N/A';
       const is_email_verified = document.getElementById('is-email-verified').checked;
 
       try {
-        const response = await fetch('http://127.0.0.1:8000/profile', {
-          method: 'POST',
+        const response = await fetch(`http://127.0.0.1:8000/profile?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&username=${encodeURIComponent(username)}&first_name=${encodeURIComponent(first_name)}&last_name=${encodeURIComponent(last_name)}&phone_number=${encodeURIComponent(phone_number)}&is_email_verified=${is_email_verified}`, {
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            email,
-            password,
-            username,
-            first_name,
-            last_name,
-            phone_number,
-            is_email_verified
-          })
         });
         if (!response.ok) {
           throw new Error('Update failed');
         }
         const result = await response.json();
-        document.getElementById('update-message').innerText = 'Profile updated successfully!';
+        document.getElementById('update-message').innerHTML = `<p class="message success">Profile updated successfully!</p>`;
       } catch (error) {
-        document.getElementById('update-message').innerText = `Error: ${error.message}`;
+        document.getElementById('update-message').innerHTML = `<p class="message error">Error: ${error.message}</p>`;
       }
     }
 
@@ -78,10 +84,10 @@
 <!-- Fetch User Profile -->
 <form onsubmit="event.preventDefault(); fetchUserProfile();">
   <label for="email">Email:</label>
-  <input type="text" id="email" name="email" required>
+  <input type="text" id="email" name="email" required value="d@aa.coms">
   <br>
   <label for="password">Password:</label>
-  <input type="password" id="password" name="password" required>
+  <input type="password" id="password" name="password" required value="d@aa.coms">
   <br>
   <br>
   <button type="submit">Get Profile</button>
@@ -91,10 +97,10 @@
 <form onsubmit="event.preventDefault(); updateUserProfile();">
   <h2>Update Profile</h2>
   <label for="update-email">Email:</label>
-  <input type="text" id="update-email" name="update-email" required>
+  <input type="text" id="update-email" name="update-email" required value="d@aa.coms">
   <br>
   <label for="update-password">Password:</label>
-  <input type="password" id="update-password" name="update-password" required>
+  <input type="password" id="update-password" name="update-password" required value="d@aa.coms">
   <br>
   <label for="username">Username:</label>
   <input type="text" id="username" name="username">
@@ -122,4 +128,3 @@
 </button>
 </body>
 </html>
-

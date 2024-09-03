@@ -91,7 +91,7 @@
 
     try {
       if (order_id && transaction_id) {
-        const response = await fetch(`http://127.0.0.1:8000/reservation-details?transaction_id=${transaction_id}&order_id=${order_id}`);
+        const response = await fetch(`https://cinemax-b.onrender.com//reservation-details?transaction_id=${transaction_id}&order_id=${order_id}`);
         if (response.ok) {
           const reservation = await response.json();
           movieDetailsElement.innerHTML = `
@@ -178,7 +178,7 @@
         const totalAmount = parseFloat(localStorage.getItem('total'));
 
         try {
-          const response = await fetch(`http://127.0.0.1:8000/discount?transaction_id=${transaction_id}&order_id=${order_id}&price=${totalAmount}&discount_percentage=${discountPercentage}`, {
+          const response = await fetch(`https://cinemax-b.onrender.com//discount?transaction_id=${transaction_id}&order_id=${order_id}&price=${totalAmount}&discount_percentage=${discountPercentage}`, {
             method: 'PUT',
           });
 

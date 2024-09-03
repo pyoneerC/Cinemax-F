@@ -50,7 +50,7 @@
 <script>
   async function fetchReservationDetails(transaction_id, order_id) {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/reservation-details?transaction_id=${transaction_id}&order_id=${order_id}`);
+      const response = await fetch(`https://cinemax-b.onrender.com//reservation-details?transaction_id=${transaction_id}&order_id=${order_id}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -86,7 +86,7 @@
 
   async function PushPaymentStatus(transaction_id, order_id) {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/payment-status?transaction_id=${transaction_id}&order_id=${order_id}`, {
+      const response = await fetch(`https://cinemax-b.onrender.com//payment-status?transaction_id=${transaction_id}&order_id=${order_id}`, {
         method: 'POST'
       });
       if (!response.ok) {

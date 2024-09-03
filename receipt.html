@@ -89,41 +89,64 @@
     <p><strong>Transaction ID:</strong> <span id="transaction-id"></span></p>
     <p><strong>Transaction Date:</strong> <span id="current-date"></span></p>
     <br>
-    <p><strong>Movie:</strong> The Matrix</p>
-    <p><strong>Time:</strong> 7:00 PM</p>
-    <p><strong>Seats:</strong> ['A1', 'A2', 'A3']</p>
-    <p><strong>Amount:</strong> $69</p>
+    <p><strong>Movie:</strong> <span id="movie-title"></span></p>
+    <p><strong>Time:</strong> <span id="movie-time"></span></p>
+    <p><strong>Seats:</strong> <span id="selected-seats"></span></p>
+    <p><strong>Amount:</strong> <span id="total-amount"></span></p>
   </div>
 
   <p>If you have any questions or need assistance, please contact our support team.</p>
 
   <button class="contact-button">
-    <a href="mailto:maxcomperatore@gmail.com?subject=Support Request&body=Hello%20Maximo%2C%0A%0AI%20need%20assistance%20regarding%20the%20recent%20payment%20with%20Order%20Number%3A%20${encodeURIComponent(orderNumber)}%20and%20Transaction%20ID%3A%20${encodeURIComponent(transactionId)}.%0A%0AThank%20you%21">Contact Support</a>
+    <a href="#" id="contact-support">Contact Support</a>
+  </button>
+  <button>
+    <a href="index.html">Back to Home</a>
   </button>
 </div>
 
 <script>
+  async function fetchReservationDetails(transaction_id, order_id) {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/reservation-details?transaction_id=${transaction_id}&order_id=${order_id}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+
+      // Update the page with reservation details
+      document.getElementById('order-number').textContent = data.order_id;
+      document.getElementById('transaction-id').textContent = data.transaction_id;
+      document.getElementById('movie-title').textContent = data.movie;
+      document.getElementById('movie-time').textContent = data.reservation_time;
+      document.getElementById('selected-seats').textContent = data.seats;
+      document.getElementById('total-amount').textContent = `$${data.price}`;
+    } catch (error) {
+      console.error('Error fetching reservation details:', error);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const transaction_id = localStorage.getItem('transaction_id');
+    const order_id = localStorage.getItem('order_id');
+
+    if (transaction_id && order_id) {
+      fetchReservationDetails(transaction_id, order_id);
+    } else {
+      console.error('Transaction ID or Order ID not found in local storage.');
+    }
+
+    document.getElementById('current-date').textContent = formatDate(new Date());
+
+    const mailtoLink = document.getElementById('contact-support');
+    mailtoLink.href = `mailto:maxcomperatore@gmail.com?subject=Support Request&body=Hello%20Maximo%2C%0A%0AI%20need%20assistance%20regarding%20the%20recent%20payment%20with%20Order%20Number%3A%20${encodeURIComponent(order_id)}%20and%20Transaction%20ID%3A%20${encodeURIComponent(transaction_id)}.%0A%0AThank%20you%21`;
+  });
 
   function formatDate(date) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return date.toLocaleDateString(undefined, options);
   }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const transaction_id = encodeURIComponent(localStorage.getItem('transaction_id'));
-    const order_id = encodeURIComponent(localStorage.getItem('order_id'));
-    document.getElementById('order-number').textContent = transaction_id
-    document.getElementById('transaction-id').textContent = order_id;
-    document.getElementById('current-date').textContent = formatDate(new Date());
-
-    const mailtoLink = document.querySelector('.contact-button a');
-    mailtoLink.href = `mailto:maxcomperatore@gmail.com?subject=Support Request&body=Hello%20Maximo%2C%0A%0AI%20need%20assistance%20regarding%20the%20recent%20payment%20with%20Order%20Number%3A%20${encodeURIComponent(orderNumber)}%20and%20Transaction%20ID%3A%20${encodeURIComponent(transactionId)}.%0A%0AThank%20you%21`;
-  });
 </script>
-
-<button>
-  <a href="index.html">Back to Home</a>
-</button>
 
 </body>
 </html>

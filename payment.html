@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,166 +10,28 @@
       margin: 20px;
       font-size: 18px;
     }
+
     .summary ul {
       list-style: none;
       padding: 0;
     }
+
     .summary li {
       margin-bottom: 10px;
     }
+
     .error {
       color: red;
       font-size: 14px;
     }
+
     .message {
       font-size: 16px;
       margin-top: 10px;
     }
   </style>
-  <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      let total = parseFloat(localStorage.getItem('total')) || 0;
-      let discountedTotal = total;
-
-      const transaction_id = localStorage.getItem('transaction_id');
-      const order_id = localStorage.getItem('order_id');
-
-      const summaryElement = document.getElementById('cart-summary');
-      const totalElement = document.getElementById('total-amount');
-      const discountMessageElement = document.getElementById('discount-message');
-      const discountCodeInput = document.getElementById('discount-code');
-      const discountForm = document.getElementById('discount-form');
-      const discountButton = document.getElementById('discount-button');
-      const paymentForm = document.getElementById('payment-form');
-      const movieDetailsElement = document.getElementById('movie-details');
-
-      // Function to disable all buttons
-      function disableAllButtons() {
-        const buttons = document.querySelectorAll('button');
-        buttons.forEach(button => {
-          button.disabled = true;
-        });
-      }
-
-      try {
-        if (order_id && transaction_id) {
-          const response = await fetch(`http://127.0.0.1:8000/reservation-details?transaction_id=${transaction_id}&order_id=${order_id}`);
-          if (response.ok) {
-            const reservation = await response.json();
-
-            movieDetailsElement.innerHTML = `
-              <h2>Movie Details</h2>
-              <p><strong>Movie:</strong><code> ${reservation.movie}</code></p>
-              <p><strong>Date:</strong><code> ${reservation.reservation_date}</code></p>
-              <p><strong>Time:</strong><code> ${reservation.reservation_time}</code></p>
-              <p><strong>Seats:</strong><code> ${reservation.seats}</code></p>
-            `;
-          } else {
-            movieDetailsElement.innerHTML = '<p class="error">Failed to fetch reservation details.</p>';
-          }
-        } else {
-          throw new Error('Transaction ID or Order ID not found in local storage.');
-        }
-      } catch (error) {
-        movieDetailsElement.innerHTML = `<p class="error">${error.message}</p>`;
-        disableAllButtons();  // Disable all buttons if there's an error
-      }
-
-      // Display cart and total summary
-      if (cart.length > 0) {
-        const list = document.createElement('ul');
-        cart.forEach(item => {
-          const listItem = document.createElement('li');
-          listItem.textContent = `${item.quantity} x ${item.ticketType} @ $${item.price} each`;
-          list.appendChild(listItem);
-        });
-        summaryElement.appendChild(list);
-        totalElement.textContent = `Total: $${total.toFixed(2)}`;
-      } else {
-        summaryElement.textContent = 'No items in cart.';
-      }
-
-      // Apply discount
-      discountForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        applyDiscount(discountCodeInput.value);
-      });
-
-      // Payment form submission
-      paymentForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        if (validateForm()) {
-          localStorage.clear();  // Clear local storage after successful payment
-          window.location.href = 'receipt.html';
-        }
-      });
-
-      function validateForm() {
-        const cardNumber = document.getElementById('card-number').value;
-        const cardExpiry = document.getElementById('card-expiry').value;
-        const cardCvc = document.getElementById('card-cvc').value;
-
-        clearErrors();
-
-        let isValid = true;
-
-        if (!/^\d{16}$/.test(cardNumber)) {
-          showError('card-number', 'Card number must be 16 digits.');
-          isValid = false;
-        }
-
-        if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(cardExpiry)) {
-          showError('card-expiry', 'Expiry date must be in MM/YY format.');
-          isValid = false;
-        }
-
-        if (!/^\d{3}$/.test(cardCvc)) {
-          showError('card-cvc', 'CVC must be 3 digits.');
-          isValid = false;
-        }
-
-        return isValid;
-      }
-
-      function applyDiscount(code) {
-        const discountCodes = {
-          'MOVIE30': 0.30,
-          'SUMMER20': 0.20,
-          'WELCOME10': 0.10
-        };
-        if (discountCodes[code]) {
-          discountedTotal = total * (1 - discountCodes[code]);
-          totalElement.textContent = `Total after discount: $${discountedTotal.toFixed(2)}`;
-          discountMessageElement.textContent = `Discount applied! New total: $${discountedTotal.toFixed(2)}`;
-          disableDiscountButton();
-          return true;
-        } else {
-          totalElement.textContent = `Total: $${total.toFixed(2)}`;
-          discountMessageElement.textContent = 'Invalid discount code.';
-        }
-        return false;
-      }
-
-      function disableDiscountButton() {
-        discountButton.disabled = true;
-        discountButton.textContent = 'Discount Applied';
-      }
-
-      function showError(fieldId, message) {
-        const field = document.getElementById(fieldId);
-        const error = document.createElement('div');
-        error.className = 'error';
-        error.textContent = message;
-        field.parentElement.appendChild(error);
-      }
-
-      function clearErrors() {
-        document.querySelectorAll('.error').forEach(error => error.remove());
-      }
-    });
-  </script>
 </head>
+
 <body>
 <h1>Payment</h1>
 
@@ -210,10 +73,144 @@
     <img src="https://placebear.com/80/80" alt="Profile Picture">
     <div class="status-indicator"></div>
   </a>
+</div>
 
-
-<br>
 <a href="javascript:void(0);" onclick="window.history.back()">Go Back</a>
 
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let total = parseFloat(localStorage.getItem('total')) || 0;
+    let discountedTotal = total;
+
+    const transaction_id = localStorage.getItem('transaction_id');
+    const order_id = localStorage.getItem('order_id');
+
+    const summaryElement = document.getElementById('cart-summary');
+    const totalElement = document.getElementById('total-amount');
+    const discountMessageElement = document.getElementById('discount-message');
+    const discountCodeInput = document.getElementById('discount-code');
+    const discountForm = document.getElementById('discount-form');
+    const paymentForm = document.getElementById('payment-form');
+    const movieDetailsElement = document.getElementById('movie-details');
+
+    function disableAllButtons() {
+      document.querySelectorAll('button').forEach(button => {
+        button.disabled = true;
+      });
+    }
+
+    try {
+      if (order_id && transaction_id) {
+        const response = await fetch(`http://127.0.0.1:8000/reservation-details?transaction_id=${transaction_id}&order_id=${order_id}`);
+        if (response.ok) {
+          const reservation = await response.json();
+          movieDetailsElement.innerHTML = `
+                            <p><strong>Movie:</strong> <code>${reservation.movie}</code></p>
+                            <p><strong>Total:</strong> <code>$${reservation.price}</code></p>
+                            <p><strong>Date:</strong> <code>${reservation.reservation_date}</code></p>
+                            <p><strong>Time:</strong> <code>${reservation.reservation_time}</code></p>
+                            <p><strong>Seats:</strong> <code>${reservation.seats}</code></p>
+                        `;
+        } else {
+          movieDetailsElement.innerHTML = '<p class="error">Failed to fetch reservation details.</p>';
+        }
+      } else {
+        throw new Error('Transaction ID or Order ID not found in local storage.');
+      }
+    } catch (error) {
+      movieDetailsElement.innerHTML = `<p class="error">${error.message}</p>`;
+      disableAllButtons();
+    }
+
+    if (cart.length > 0) {
+      const list = document.createElement('ul');
+      cart.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${item.quantity} x ${item.ticketType} @ $${item.price} each`;
+        list.appendChild(listItem);
+      });
+      summaryElement.appendChild(list);
+    } else {
+      summaryElement.textContent = 'No items in cart.';
+    }
+
+    discountForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      applyDiscount(discountCodeInput.value);
+    });
+
+    paymentForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (validateForm()) {
+        localStorage.clear();
+        window.location.href = 'receipt.html';
+      }
+    });
+
+    function validateForm() {
+      const cardNumber = document.getElementById('card-number').value;
+      const cardExpiry = document.getElementById('card-expiry').value;
+      const cardCvc = document.getElementById('card-cvc').value;
+
+      clearErrors();
+
+      let isValid = true;
+
+      if (!/^\d{16}$/.test(cardNumber)) {
+        showError('card-number', 'Card number must be 16 digits.');
+        isValid = false;
+      }
+
+      if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(cardExpiry)) {
+        showError('card-expiry', 'Expiry date must be in MM/YY format.');
+        isValid = false;
+      }
+
+      if (!/^\d{3}$/.test(cardCvc)) {
+        showError('card-cvc', 'CVC must be 3 digits.');
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    function applyDiscount(code) {
+      const discountCodes = {
+        'MOVIE30': 0.30,
+        'SUMMER20': 0.20,
+        'WELCOME10': 0.10
+      };
+      if (discountCodes[code]) {
+        discountedTotal = total * (1 - discountCodes[code]);
+        totalElement.textContent = `Total after discount: $${discountedTotal.toFixed(2)}`;
+        discountMessageElement.textContent = `Discount applied! New total: $${discountedTotal.toFixed(2)}`;
+        disableDiscountButton();
+      } else {
+        totalElement.textContent = `Total: $${total.toFixed(2)}`;
+        discountMessageElement.textContent = 'Invalid discount code.';
+      }
+    }
+
+    function disableDiscountButton() {
+      const discountButton = document.getElementById('discount-button');
+      discountButton.disabled = true;
+      discountButton.textContent = 'Discount Applied';
+    }
+
+    function showError(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      const error = document.createElement('div');
+      error.className = 'error';
+      error.textContent = message;
+      field.parentElement.appendChild(error);
+    }
+
+    function clearErrors() {
+      document.querySelectorAll('.error').forEach(error => error.remove());
+    }
+  });
+</script>
 </body>
+
 </html>

@@ -18,6 +18,7 @@
     <img src="img/User.avif" alt="Profile Picture">
     <div class="status-indicator"></div>
   </a>
+</div>
 
 <div class="seat-container">
   <div class="seat-row">
@@ -117,6 +118,10 @@
   <p id="countdown" class="countdown"></p>
 </div>
 
+<code>
+  <div class="notice">NOTICE: This is a website made for learning purposes and does not represent a real cinema. All information is fictional.</div>
+</code>
+
 <script>
   const maxSeats = parseInt(localStorage.getItem('totalSeats'), 10);
   document.getElementById('seats-count').textContent = maxSeats;
@@ -144,10 +149,20 @@
     const seatsCountDisplay = document.getElementById('seats-count');
     const continueButton = document.getElementById('continue-button');
     selectedSeatsDisplay.textContent = `Selected Seats: ${selectedSeats.join(', ') || 'None'}`;
+
     const seatsRemaining = maxSeats - selectedSeats.length;
     seatsCountDisplay.textContent = seatsRemaining;
+
+    // Change the color based on seats remaining
+    if (seatsRemaining > 0) {
+      seatsCountDisplay.style.color = 'green';
+    } else {
+      seatsCountDisplay.style.color = 'red';
+    }
+
     continueButton.disabled = selectedSeats.length !== maxSeats;
   }
+
 
   function proceedToNextStep() {
     if (selectedSeats.length === maxSeats) {
@@ -230,7 +245,9 @@
 </script>
 
 <br>
-<a href="javascript:void(0);" onclick="window.history.back()">Go Back</a>
+<div style="position: absolute; top:85%; left: 50%; transform: translate(-50%, -50%);">
+  <a href="javascript:void(0);" onclick="window.history.back()" style="color: yellow; text-decoration: none;">Go Back</a>
+</div>
 
 </body>
 </html>

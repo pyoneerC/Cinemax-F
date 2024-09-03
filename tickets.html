@@ -17,8 +17,6 @@
       position: fixed;
       top: 20px;
       right: 20px;
-      background: #f4f4f4;
-      border-radius: 8px;
       padding: 10px;
       text-align: center;
       width: 200px;
@@ -28,6 +26,36 @@
       height: 80px;
       border-radius: 50%;
       object-fit: cover;
+      position: relative;
+    }
+    .profile .status-indicator {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: green;
+      border-radius: 50%;
+      top: 70px;
+      right: 70px;
+      border: 2px solid #f4f4f4;
+      animation: shockwave 3s infinite;
+    }
+    @keyframes shockwave {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+        filter: blur(0px);
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+        filter: blur(1px);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+        filter: blur(0px);
+      }
+    }
     }
     .profile h3 {
       margin: 10px 0 5px;
@@ -58,7 +86,8 @@
 
 <div class="profile">
   <a href="profile.html">
-  <img src="https://placebear.com/80/80" alt="Profile Picture">
+    <img src="https://placebear.com/80/80" alt="Profile Picture">
+    <div class="status-indicator"></div>
   </a>
 </div>
 

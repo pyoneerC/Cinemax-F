@@ -100,15 +100,9 @@
   <button class="contact-button">
     <a href="mailto:maxcomperatore@gmail.com?subject=Support Request&body=Hello%20Maximo%2C%0A%0AI%20need%20assistance%20regarding%20the%20recent%20payment%20with%20Order%20Number%3A%20${encodeURIComponent(orderNumber)}%20and%20Transaction%20ID%3A%20${encodeURIComponent(transactionId)}.%0A%0AThank%20you%21">Contact Support</a>
   </button>
-  <button>
-    <a href="index.html">Back to Home</a>
-  </button>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    localStorage.clear();
-  });
 
   function formatDate(date) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -116,15 +110,20 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    const orderNumber = generateRandomOrderNumber();
-    const transactionId = generateTransactionId();
-    document.getElementById('order-number').textContent = orderNumber;
-    document.getElementById('transaction-id').textContent = transactionId;
+    const transaction_id = encodeURIComponent(localStorage.getItem('transaction_id'));
+    const order_id = encodeURIComponent(localStorage.getItem('order_id'));
+    document.getElementById('order-number').textContent = transaction_id
+    document.getElementById('transaction-id').textContent = order_id;
     document.getElementById('current-date').textContent = formatDate(new Date());
 
     const mailtoLink = document.querySelector('.contact-button a');
     mailtoLink.href = `mailto:maxcomperatore@gmail.com?subject=Support Request&body=Hello%20Maximo%2C%0A%0AI%20need%20assistance%20regarding%20the%20recent%20payment%20with%20Order%20Number%3A%20${encodeURIComponent(orderNumber)}%20and%20Transaction%20ID%3A%20${encodeURIComponent(transactionId)}.%0A%0AThank%20you%21`;
   });
 </script>
+
+<button>
+  <a href="index.html">Back to Home</a>
+</button>
+
 </body>
 </html>

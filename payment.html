@@ -56,13 +56,13 @@
   <h2>Pay with Card</h2>
   <form id="payment-form" method="post">
     <label for="card-number">Card Number</label>
-    <input type="text" id="card-number" name="card-number" required>
+    <input type="text" id="card-number" name="card-number" required value="4242424242424242">
 
     <label for="card-expiry">Expiry Date (MM/YY)</label>
-    <input type="text" id="card-expiry" name="card-expiry" required>
+    <input type="text" id="card-expiry" name="card-expiry" required value="12/25">
 
     <label for="card-cvc">CVC</label>
-    <input type="text" id="card-cvc" name="card-cvc" required>
+    <input type="text" id="card-cvc" name="card-cvc" required value="123">
 
     <button type="submit">Submit Payment</button>
   </form>
@@ -143,7 +143,6 @@
     paymentForm.addEventListener('submit', (event) => {
       event.preventDefault();
       if (validateForm()) {
-        localStorage.clear();
         window.location.href = 'receipt.html';
       }
     });

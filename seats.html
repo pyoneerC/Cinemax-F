@@ -183,7 +183,7 @@
         const transaction_id = encodeURIComponent(localStorage.getItem('transaction_id'));
         const order_id = encodeURIComponent(localStorage.getItem('order_id'));
 
-        fetch(`https://cinemax-b.onrender.com//seats?seats=${selectedSeats.join(',')}&transaction_id=${transaction_id}&order_id=${order_id}`, {
+        fetch(`https://cinemax-b.onrender.com/seats?seats=${selectedSeats.join(',')}&transaction_id=${transaction_id}&order_id=${order_id}`, {
           method: 'POST',
         })
           .then(response => {

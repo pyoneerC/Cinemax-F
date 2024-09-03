@@ -41,7 +41,15 @@
             if (result['transaction_id'] && result['order_id']) {
               localStorage.setItem('transaction_id', result['transaction_id']);
               localStorage.setItem('order_id', result['order_id']);
-              window.location.href = 'tickets.html';
+
+              // Validate step_count
+              const stepCount = await validateStepCount(result['transaction_id'], result['order_id']);
+              if (stepCount !== 0) {
+                alert('Nope! You need to complete the previous steps first. Returning to the home page.');
+                window.location.href = 'index.html';
+              } else {
+                window.location.href = 'tickets.html';
+              }
             } else {
               console.error('Transaction ID or Order ID missing in response');
               alert('Failed to retrieve transaction details.');
@@ -61,6 +69,20 @@
     function getQueryParam(param) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(param);
+    }
+
+    async function validateStepCount(transactionId, orderId) {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/step_count?transaction_id=${transactionId}&order_id=${orderId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch step count');
+        }
+        const data = await response.json();
+        return data.step_count;
+      } catch (error) {
+        console.error('Error validating step count:', error);
+        return -1;
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {

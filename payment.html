@@ -6,58 +6,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Payment</title>
   <link rel="stylesheet" href="css/payment.css">
-  <style>
-    .strikethrough {
-      text-decoration: line-through;
-    }
-  </style>
 </head>
 
 <body>
-<h1>Payment</h1>
+<header>
+  <h1>Payment</h1>
+  <div class="profile">
+    <a href="profile.html">
+      <img src="img/User.avif" alt="Profile Picture">
+      <div class="status-indicator"></div>
+    </a>
+  </div>
+</header>
 
-<div class="summary" id="cart-summary"></div>
-<p id="total-amount" class="summary"></p>
-<p id="total-before-discount" class="summary"></p>
+<main>
+  <div class="summary" id="cart-summary"></div>
+  <p id="total-amount" class="summary"></p>
+  <p id="total-before-discount" class="summary"></p>
 
-<section id="movie-details">
-  <h2>Movie Details</h2>
-</section>
+  <section id="movie-details">
+    <h2>Movie Details</h2>
+  </section>
 
-<section id="discount-section">
-  <h2>Apply Discount</h2>
-  <form id="discount-form">
-    <label for="discount-code">Discount Code (optional)</label>
-    <input type="text" id="discount-code" name="discount-code" value="WELCOME10">
-    <button type="submit" id="discount-button">Apply Discount</button>
-    <p id="discount-message" class="message"></p>
-  </form>
-</section>
+  <section id="discount-section">
+    <h2>Apply Discount</h2>
+    <form id="discount-form">
+      <label for="discount-code">Discount Code (optional)</label>
+      <input type="text" id="discount-code" name="discount-code" placeholder="WELCOME10">
+      <button type="submit" id="discount-button">Apply Discount</button>
+      <p id="discount-message" class="message"></p>
+    </form>
+  </section>
 
-<section id="payment-section">
-  <h2>Pay with Card</h2>
-  <form id="payment-form" method="post">
-    <label for="card-number">Card Number</label>
-    <input type="text" id="card-number" name="card-number" required value="4242424242424242">
+  <section id="payment-section">
+    <h2>Pay with Card</h2>
+    <form id="payment-form" method="post">
+      <label for="card-number">Card Number</label>
+      <input type="text" id="card-number" name="card-number" required value="4242424242424242">
 
-    <label for="card-expiry">Expiry Date (MM/YY)</label>
-    <input type="text" id="card-expiry" name="card-expiry" required value="12/25">
+      <label for="card-expiry">Expiry Date (MM/YY)</label>
+      <input type="text" id="card-expiry" name="card-expiry" required value="12/25">
 
-    <label for="card-cvc">CVC</label>
-    <input type="text" id="card-cvc" name="card-cvc" required value="123">
+      <label for="card-cvc">CVC</label>
+      <input type="text" id="card-cvc" name="card-cvc" required value="123">
 
-    <button type="submit">Submit Payment</button>
-  </form>
-</section>
+      <button type="submit">Submit Payment</button>
+    </form>
+  </section>
 
-<div class="profile">
-  <a href="profile.html">
-    <img src="img/User.avif" alt="Profile Picture">
-    <div class="status-indicator"></div>
-  </a>
-</div>
+  <div class="links-container">
+    <a href="javascript:void(0);" onclick="window.history.back()" class="link-button">Go Back</a>
+  </div>
 
-<a href="javascript:void(0);" onclick="window.history.back()">Go Back</a>
+  <code>
+    <div class="notice">NOTICE: This is a website made for learning purposes and does not represent a real cinema. All information is fictional.</div>
+  </code>
+</main>
 
 <script>
   document.addEventListener('DOMContentLoaded', async () => {
@@ -89,11 +93,11 @@
         if (response.ok) {
           const reservation = await response.json();
           movieDetailsElement.innerHTML = `
-                            <p><strong>Movie:</strong> <code>${reservation.movie}</code></p>
-                            <p><strong>Date:</strong> <code>${reservation.reservation_date}</code></p>
-                            <p><strong>Time:</strong> <code>${reservation.reservation_time}</code></p>
-                            <p><strong>Seats:</strong> <code>${reservation.seats}</code></p>
-                        `;
+                              <p><strong>Movie:</strong> <code>${reservation.movie}</code></p>
+                              <p><strong>Date:</strong> <code>${reservation.reservation_date}</code></p>
+                              <p><strong>Time:</strong> <code>${reservation.reservation_time}</code></p>
+                              <p><strong>Seats:</strong> <code>${reservation.seats}</code></p>
+                          `;
         } else {
           movieDetailsElement.innerHTML = '<p class="error">Failed to fetch reservation details.</p>';
         }

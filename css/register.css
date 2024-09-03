@@ -9,10 +9,13 @@ body {
   align-items: center;
 }
 
-h2 {
-  font-family: 'Roboto', sans-serif;
-  color: #f1c40f;
+h1 {
+  color: #ffffff;
   margin: 20px 0;
+}
+
+h2 {
+  color: #f1c40f;
 }
 
 form {
@@ -27,6 +30,7 @@ form {
 
 label {
   display: block;
+  text-align: center;
   margin: 10px 0 5px;
   font-weight: bold;
   color: #ffffff;
@@ -64,31 +68,15 @@ button:hover {
   background-color: #d0a411;
 }
 
-#back-button {
-  background-color: #333;
-  color: #f1c40f;
-  border: 1px solid #444;
+#response-message {
+  font-weight: bold;
+  margin-top: 10px;
 }
-
-#back-button:hover {
-  background-color: #444;
+.success {
+  color: green;
 }
-
-.container {
-  max-width: 800px;
-  width: 100%;
-  text-align: center;
-}
-
-a {
-  color: #f1c40f;
-  text-decoration: none;
-  font-size: 16px;
-  margin: 10px;
-}
-
-a:hover {
-  text-decoration: underline;
+.error {
+  color: red;
 }
 
 .notice {
@@ -102,4 +90,3 @@ a:hover {
   left: 0;
   z-index: 1000;
 }
-

@@ -17,6 +17,17 @@
       background-color: #f8d7da;
       color: #721c24;
     }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
   </style>
   <script>
     async function fetchUserProfile() {
@@ -71,6 +82,41 @@
       }
     }
 
+    async function fetchReservations() {
+      const email = document.getElementById('reservation-email').value;
+      const password = document.getElementById('reservation-password').value;
+
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/all-user-reservations?email=${encodeURIComponent(email)}`);
+        if (!response.ok) {
+          throw new Error('Reservations not found or incorrect credentials');
+        }
+        const reservations = await response.json();
+
+        let reservationsHTML = '<table><tr><th>Email</th><th>Movie</th><th>Reservation Date</th><th>Reservation Time</th><th>Tickets</th><th>Seats</th><th>Transaction ID</th><th>Order ID</th><th>Price</th><th>Payment Succeeded?</th></tr>';
+        reservations.forEach(reservation => {
+          reservationsHTML += `
+            <tr>
+              <td>${reservation.email}</td>
+              <td>${reservation.movie}</td>
+              <td>${reservation.reservation_date}</td>
+              <td>${reservation.reservation_time}</td>
+              <td>${reservation.tickets}</td>
+              <td>${reservation.seats}</td>
+              <td>${reservation.transaction_id}</td>
+              <td>${reservation.order_id}</td>
+              <td>${reservation.price}</td>
+              <td>${reservation.payment_succeeded ? 'Yes' : 'No'}</td>
+            </tr>
+          `;
+        });
+        reservationsHTML += '</table>';
+        document.getElementById('reservations-info').innerHTML = reservationsHTML;
+      } catch (error) {
+        document.getElementById('reservations-info').innerHTML = `<p class="message error">${error.message}</p>`;
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('back-button').addEventListener('click', () => {
         window.history.back();
@@ -121,7 +167,22 @@
   <p id="update-message"></p>
 </form>
 
+<!-- Fetch Reservations -->
+<form onsubmit="event.preventDefault(); fetchReservations();">
+  <h2>View Reservations</h2>
+  <label for="reservation-email">Email:</label>
+  <input type="text" id="reservation-email" name="reservation-email" required value="d@aa.coms">
+  <br>
+  <label for="reservation-password">Password:</label>
+  <input type="password" id="reservation-password" name="reservation-password" required value="d@aa.coms">
+  <br>
+  <button type="submit">Get Reservations</button>
+</form>
+
 <div id="user-info"></div>
+<br>
+<div id="reservations-info"></div>
+<br>
 
 <button id="back-button">
   Go back

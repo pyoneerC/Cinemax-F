@@ -18,7 +18,6 @@ Receipt Generation:
 - Movie Catalog: Display a list of movies.
 - Seat Selection: Choose seats based on availability.
 - User Registration & Login: Register and log in to manage bookings.
-- Responsive Design: Optimized for both desktop and mobile devices.
 
 ## Setup
 Clone the Repository
@@ -40,13 +39,6 @@ start index.html
 ```
 
 depending on your operating system.
-
-## Folder Structure
-`index.html`: Main HTML file.
-`styles.css`: CSS file for styling.
-`script.js`: JavaScript file for functionality.
-`images/`: Directory for image assets.
-
 
 ## Usage
 - Browse Movies
@@ -75,12 +67,13 @@ To deploy the project, host the files on any static file hosting service such as
 ### Contributing
 Contributions are welcome! Please follow these steps:
 
-Fork the repository.
-Create a new branch for your feature or fix.
-Commit your changes.
-Push the branch to your fork.
-Open a pull request.
-License
+- Fork the repository.
+- Create a new branch for your feature or fix.
+- Commit your changes.
+- Push the branch to your fork.
+- Open a pull request.
+
+### License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 Contact

@@ -10,9 +10,9 @@ Seat Reservation:
 Profile Information:
 ![Profile Information](img/readme/cinemax3.png)
 Payment Page:
-![Payment Page](img/readme/cinemax4.png)    
+![Payment Page](img/readme/cinemax5.png)
 Receipt Generation:
-![Receipt Generation](img\readme\cinemax4.png)
+![Receipt Generation](img/readme/cinemax4.png)
 
 ## Features
 - Movie Catalog: Display a list of movies.

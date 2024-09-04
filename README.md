@@ -4,13 +4,13 @@ Cinemax is a modern cinema booking platform that allows users to browse movies, 
 [Live Demo](https://cinemaximo.netlify.app/)
 
 Main Page:
-![Main Page](img\readme\cinemax1.png)
+![Main Page](img/readme/cinemax1.png)
 Seat Reservation:
-![Seat Reservation](img\readme\cinemax2.png)
+![Seat Reservation](img/readme/cinemax2.png)
 Profile Information:
-![Profile Information](img\readme\cinemax3.png)
+![Profile Information](img/readme/cinemax3.png)
 Payment Page:
-![Payment Page](img\readme\cinemax5.png)
+![Payment Page](img/readme/cinemax4.png)    
 Receipt Generation:
 ![Receipt Generation](img\readme\cinemax4.png)
 

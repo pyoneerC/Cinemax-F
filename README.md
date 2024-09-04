@@ -2,9 +2,17 @@
 Cinemax is a modern cinema booking platform that allows users to browse movies, select seats, and book tickets. The project is built using HTML, CSS, and JavaScript, featuring a clean and responsive design. It uses [Cinemax-B](https://github.com/pyoneerC/Cinemax-B) as the backend API to manage user authentication and bookings, written in Python.
 
 [Live Demo](https://cinemaximo.netlify.app/)
-![Cinemax](img/CineMax.avif)
-![Cinemax](img/cinemax1.png)
-![Cinemax](img/cinemax2.png)
+
+Main Page:
+![Main Page](img\readme\cinemax1.png)
+Seat Reservation:
+![Seat Reservation](img\readme\cinemax2.png)
+Profile Information:
+![Profile Information](img\readme\cinemax3.png)
+Payment Page:
+![Payment Page](img\readme\cinemax5.png)
+Receipt Generation:
+![Receipt Generation](img\readme\cinemax4.png)
 
 ## Features
 - Movie Catalog: Display a list of movies.
